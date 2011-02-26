@@ -69,8 +69,8 @@ import eu.morfeoproject.fast.catalogue.ontologies.SindiceOntologyFinder;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.Ontology;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntology;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
-import eu.morfeoproject.fast.catalogue.planner.Planner;
 import eu.morfeoproject.fast.catalogue.planner.PlannerFactory;
+import eu.morfeoproject.fast.catalogue.planner.ScreenPlanner;
 import eu.morfeoproject.fast.catalogue.recommender.Recommender;
 import eu.morfeoproject.fast.catalogue.recommender.ScreenComponentRecommender;
 import eu.morfeoproject.fast.catalogue.recommender.ScreenRecommender;
@@ -92,7 +92,7 @@ public class Catalogue {
 
 	private CatalogueConfiguration configuration;
 	private TripleStore tripleStore;
-	private Planner planner;
+	private ScreenPlanner screenPlanner;
 	private Recommender screenRecommender;
 	private Recommender scRecommender;
 	private String environment;
@@ -126,7 +126,7 @@ public class Catalogue {
 		// connect to local or remote triple store
 		tripleStore = (sesameServer != null && repositoryID != null) ?
 			new RemoteTripleStore(sesameServer, repositoryID) :
-				new LocalTripleStore(storageDir, indexes);
+				new LocalTripleStore(storageDir+"/triplestore", indexes);
 		tripleStore.open();
 
 		// creates the URIs for the prototypes/clones graphs
@@ -142,20 +142,20 @@ public class Catalogue {
 			restore();
 		}
 
-		// creates the planner
-		planner = PlannerFactory.createPlanner(this, this.environment);
+		// creates the screen planner
+		screenPlanner = PlannerFactory.createScreenPlanner(this);
 		
 		// creates the recommenders
-		screenRecommender = new ScreenRecommender(this);
-		scRecommender = new ScreenComponentRecommender(this);
+		screenRecommender = new ScreenRecommender(this, storageDir+"/recommender");
+		scRecommender = new ScreenComponentRecommender(this, storageDir+"/recommender");
 	}
 
 	public URL getServerURL() {
 		return configuration.getURL(this.environment, "serverURL");
 	}
-
-	public Planner getPlanner() {
-		return this.planner;
+	
+	public String getStoragePath() {
+		return this.configuration.get(this.environment, "storageDir");
 	}
 
 	/**
@@ -219,8 +219,8 @@ public class Catalogue {
 	public void clear() {
 		// clear the repository
 		tripleStore.clear();
-		// clear the planner
-		planner.clear();
+		// clear the screen planner
+		screenPlanner.clear();
 		// clear recommenders
 		screenRecommender.rebuild();
 		scRecommender.rebuild();
@@ -434,8 +434,8 @@ public class Catalogue {
 		
 		// do pagination
 		int count = results.size();
-		if (offset > 0 || limit > -1) {
-			int toIndex = limit > -1 ? Math.max(offset + limit, count) : count;
+		if (results.size() > 0 && (offset > 0 || limit > -1)) {
+			int toIndex = limit > -1 ? Math.min(offset + limit, count) : count;
 			results = results.subList(offset, toIndex);
 		}
 
@@ -632,8 +632,8 @@ public class Catalogue {
 		
 		// do pagination
 		int count = results.size();
-		if (offset > 0 || limit > -1) {
-			int toIndex = limit > -1 ? Math.max(offset + limit, count) : count;
+		if (results.size() > 0 && (offset > 0 || limit > -1)) {
+			int toIndex = limit > -1 ? Math.min(offset + limit, count) : count;
 			results = results.subList(offset, toIndex);
 		}
 
@@ -645,8 +645,12 @@ public class Catalogue {
 	 * checks whether a 'postcondition' is satisfied. NOTE: 'preconditions' are
 	 * always satisfied
 	 * 
-	 * @param screens
-	 *            The list of screens where the preconditions are obtained
+	 * @param screenList
+	 *            A list of screens (to extract their pre/postconditions)
+	 * @param preconditions
+	 *            A list of preconditions
+	 * @param postconditions
+	 *            A list of postconditions
 	 * @param plugin
 	 *            ignored at this version
 	 * @param subsume
@@ -679,7 +683,7 @@ public class Catalogue {
 	 * which the precondition belongs to, hence you can set if a screen has to
 	 * be excluded while checking.
 	 * 
-	 * @param screens
+	 * @param screenList
 	 *            a list of screens which might satisfy the precondition
 	 * @param conditionToCheck
 	 *            the condition to check if it is satisfied
@@ -756,7 +760,7 @@ public class Catalogue {
 	 * 
 	 * @param c1
 	 * @param c2
-	 * @return
+	 * @return true if conditions are compatible
 	 */
 	public boolean isConditionCompatible(Condition c1, Condition c2) {
 		if (c1 == null || c2 == null) return false;
@@ -792,7 +796,7 @@ public class Catalogue {
 	 * 
 	 * @param conditionList
 	 * @param screenList
-	 * @return
+	 * @return reachable screens subset
 	 */
 	public List<Screen> filterReachableScreens(List<Condition> conditionList, List<Screen> screenList) {
 		ArrayList<Screen> results = new ArrayList<Screen>();
@@ -1005,7 +1009,7 @@ public class Catalogue {
 	/**
 	 * Removes all the triples about the building block, its pre-/post-conditions, actions, etc.
 	 * 
-	 * @param rUri
+	 * @param bbUri
 	 * @throws NotFoundException
 	 */
 	protected void removeBuildingBlock(URI bbUri) throws NotFoundException {
@@ -1145,7 +1149,7 @@ public class Catalogue {
 		// persists the screen
 		saveScreen(screen);
 		// create plans for the screen
-		if (planner != null) planner.add(screen);
+		if (screenPlanner != null) screenPlanner.add(screen);
 		scRecommender.rebuild(); //FIXME do not rebuild every time a new screen is added!
 	}
 
@@ -1183,15 +1187,19 @@ public class Catalogue {
 		// save new content with the same URI
 		saveScreen(screen);
 		// calculate new plans
-		if (planner != null) planner.update(screen, oldScreen);
+		if (screenPlanner != null) {
+			screenPlanner.update(screen, oldScreen);
+		}
 		scRecommender.rebuild(); //FIXME do not rebuild every time a screen is updated!
 		if (log.isInfoEnabled()) log.info("Screen " + screen.getUri() + " updated.");
 	}
-
+	
 	public void removeScreen(URI screenUri) throws NotFoundException {
 		removeBuildingBlock(screenUri);
 		// remove the screen from the planner
-		if (planner != null) planner.remove(screenUri);
+		if (screenPlanner != null) {
+			screenPlanner.remove(screenUri);
+		}
 		scRecommender.rebuild(); //FIXME do not rebuild every time a screen is deleted!
 	}
 
@@ -1659,10 +1667,10 @@ public class Catalogue {
 	}
 
 	/**
-	 * Returns the first type found for an URI
+	 * Returns the first type (rdf:type) found for an URI
 	 * 
 	 * @param uri
-	 * @return
+	 * @return type URI
 	 */
 	public URI getType(URI uri) {
 		ClosableIterator<Statement> it = tripleStore.findStatements(uri, RDF.type, Variable.ANY);
@@ -1927,7 +1935,7 @@ public class Catalogue {
 	 * 
 	 * @param cloneGoal
 	 * @param cloneList list of 'cloned' screens
-	 * @return
+	 * @return list of plans
 	 * @throws BuildingBlockException
 	 * @throws NotFoundException 
 	 */
@@ -1949,8 +1957,8 @@ public class Catalogue {
 		}
 		
 		List<Plan> planList = new ArrayList<Plan>();
-		if (planner != null) {
-			planList.addAll(planner.searchPlans(prototypeGoal, prototypeList));
+		if (screenPlanner != null) {
+			planList.addAll(screenPlanner.searchPlans(prototypeGoal, prototypeList));
 		}
 		
 		return planList;
@@ -1959,8 +1967,8 @@ public class Catalogue {
 	/**
 	 * 
 	 * @param cloneGoalList
-	 * @param screenList
-	 * @return
+	 * @param cloneList
+	 * @return list of plans
 	 * @throws BuildingBlockException 
 	 * @throws NotFoundException 
 	 */
@@ -1986,8 +1994,8 @@ public class Catalogue {
 		}
 		
 		List<Plan> planList = new ArrayList<Plan>();
-		if (planner != null) {
-			planList.addAll(planner.searchPlans(prototypeGoalList, prototypeList));
+		if (screenPlanner != null) {
+			planList.addAll(screenPlanner.searchPlans(prototypeGoalList, prototypeList));
 		}
 		
 		return planList;
@@ -2147,9 +2155,9 @@ public class Catalogue {
 	}
 
 	// TODO only for debug purposes
-	public void exportToTrig() {
+	public void exportToTrig(String filePath) {
 		try {
-			tripleStore.export(new FileOutputStream("C:\\catalogue.n3"), Syntax.Trig);
+			tripleStore.export(new FileOutputStream(filePath), Syntax.Trig);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -2168,5 +2176,5 @@ public class Catalogue {
 	public void dump() {
 		tripleStore.dump();
 	}
-
+	
 }

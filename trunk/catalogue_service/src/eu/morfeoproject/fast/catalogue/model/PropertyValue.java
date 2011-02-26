@@ -66,7 +66,7 @@ public class PropertyValue {
 
 	/**
 	 * Compare if two resources have the same URI
-	 * @param r the resource to compare with
+	 * @param o the resource to compare with
 	 * @return true if their URIs are the same
 	 */
 	@Override

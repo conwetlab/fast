@@ -299,7 +299,7 @@ public abstract class TripleStore {
     /**
      * Checks if a specific ontology already exists in the persistent modelset
      * @param ontologyUri
-     * @return
+     * @return true if the ontology already exists
      */
     public boolean existsOntology(URI ontologyUri) {
     	Model model = persistentModelSet.getModel(ontologyUri);
@@ -455,6 +455,14 @@ public abstract class TripleStore {
    		persistentModelSet.removeStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY);
     }
     
+    public void removeStatement(URI context, Resource subject, URI predicate, Node object) {
+    	persistentModelSet.removeStatement(context, subject, predicate, object);
+    }
+    
+    public void removeStatements(UriOrVariable context, ResourceOrVariable subject, UriOrVariable predicate, NodeOrVariable object) {
+    	persistentModelSet.removeStatements(context, subject, predicate, object);
+    }
+    
 	/**
      * Set the RDFSlabel and DC:title of the resource to the 
      * passed label. The resource can be a thing, class,
@@ -489,9 +497,9 @@ public abstract class TripleStore {
 	}
 
 	/**
-     * Creates a new URI inside the namespace returned by 
-     * {@link #getUserNamespace()}. The name passed as parameter
-     * will be used inside this url, to increase readability.
+     * Creates a new URI inside a given namespace. The name passed 
+     * as parameter will be used inside this url, to increase
+     * readability.
      * If a URI with that name already exists, a random part will
      * be added to the name (the name is treated as "seed").
      * @param name a name to include in the URI

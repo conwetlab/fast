@@ -24,7 +24,7 @@ import org.apache.commons.logging.Log;
 public class Util {
 
 	/**
-	 * @returns true iff the given param is defined in the request AND either no
+	 * @return true iff the given param is defined in the request AND either no
 	 *          value is associated OR none of the values is equal to "n".
 	 */
 	public static boolean yes(HttpServletRequest request, String param) {
@@ -33,7 +33,7 @@ public class Util {
 	}
 
 	/**
-	 * @returns the list of values associated to the given param. null if the
+	 * @return the list of values associated to the given param. null if the
 	 *          param is not included in the request.
 	 */
 	public static List<String> getParamValues(HttpServletRequest request,
@@ -48,7 +48,7 @@ public class Util {
 	}
 
 	/**
-	 * @returns The last value associated with the given parameter. If not value
+	 * @return The last value associated with the given parameter. If not value
 	 *          is explicitly associated, it returns the given default value.
 	 */
 	public static String getParam(HttpServletRequest request, String param,
@@ -69,7 +69,7 @@ public class Util {
 	}
 
 	/**
-	 * @returns the list of values associated with a header. Never null.
+	 * @return the list of values associated with a header. Never null.
 	 */
 	public static List<String> getHeader(HttpServletRequest request,
 			String hname) {

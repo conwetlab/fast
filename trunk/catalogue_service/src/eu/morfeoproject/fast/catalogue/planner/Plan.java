@@ -1,24 +1,28 @@
 package eu.morfeoproject.fast.catalogue.planner;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.node.URI;
 
 public class Plan {
 	
-	private ArrayList<URI> uriList = new ArrayList<URI>();
+	private List<URI> uriList = new LinkedList<URI>();
 	
-	public ArrayList<URI> getUriList() {
+	public List<URI> getUriList() {
 		return uriList;
 	}
 	
-	public ArrayList<URI> getUriList(List<URI> toExclude) {
-		ArrayList<URI> newList = new ArrayList<URI>();
+	public List<URI> getUriList(List<URI> toExclude) {
+		LinkedList<URI> newList = new LinkedList<URI>();
 		for (URI uri : uriList)
 			if (!toExclude.contains(uri))
 				newList.add(uri);
 		return newList;
+	}
+	
+	public void setUriList(List<URI> uriList) {
+		this.uriList = uriList;
 	}
 	
 	// doesn't make a new copy of the URIs

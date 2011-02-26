@@ -22,7 +22,7 @@ public class DateFormatter {
 	/**
 	 * 
 	 * @param date
-	 * @return
+	 * @return string representation of the date in ISO-8601
 	 */
 	public static String formatDateISO8601(Date date) {
 		return ISO8601FORMAT.format(date);
@@ -31,7 +31,7 @@ public class DateFormatter {
 	/**
 	 * 
 	 * @param text
-	 * @return
+	 * @return an object Date
 	 */
 	public static Date parseDateISO8601(String text) {
 		try {

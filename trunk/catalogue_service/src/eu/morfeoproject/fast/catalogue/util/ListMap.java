@@ -59,7 +59,7 @@ public class ListMap<K,V> {
 	 * Return the list for the given key, 
 	 * if no such key an empty list is returned.
 	 * @param key
-	 * @return
+	 * @return the list for the given key
 	 */
 	public List<V>get(K key) {
 		if (data.containsKey(key))

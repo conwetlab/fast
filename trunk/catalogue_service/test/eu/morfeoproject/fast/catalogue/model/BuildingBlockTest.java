@@ -103,6 +103,7 @@ public class BuildingBlockTest {
 		assertTrue(s2.getPipes().containsAll(s1.getPipes()));
 		assertEquals(s1.getTriggers().size(), s2.getTriggers().size());
 		assertTrue(s2.getTriggers().containsAll(s1.getTriggers()));
+		TestUtils.getCatalogue().exportToTrig("/home/ismriv/catalogue-dump.n3");
 	}
 
 	@Test

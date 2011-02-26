@@ -265,12 +265,12 @@ public class FindCheckTest {
 		assertTrue(results.contains(bs3.getUri()));
 		assertTrue(results.contains(bs4.getUri()));
 
-		//----- search bb compatibles in terms of their pre/postconditions (order is important) -----//
+		//----- search bb from the recommender (order is important) -----//
 		results = TestUtils.getCatalogue().findScreenComponents(scList, null, conList, 0, 3, null, Constants.PATTERNS);
 		assertEquals(3, results.size());
-		assertTrue(results.get(0).equals(f6.getUri()));
-		assertTrue(results.get(1).equals(bs1.getUri()));
-		assertTrue(results.get(2).equals(bs3.getUri()));
+		assertEquals(results.get(0), f6.getUri());
+		assertEquals(results.get(1), bs1.getUri());
+		assertEquals(results.get(2), bs3.getUri());
 
 		//----- both strategies combined (order is important) -----//
 		results = TestUtils.getCatalogue().findScreenComponents(scList, null, conList, 2, -1, null, Constants.PREPOST + Constants.PATTERNS);

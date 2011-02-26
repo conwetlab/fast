@@ -105,7 +105,7 @@ public class SimpleCache<T> {
 	 *            the object will be referenced with this name in the cache
 	 * @param obj
 	 *            the object
-	 * @param expire
+	 * @param expireTime
 	 *            custom expiration time in seconds
 	 */
 	public void put(final String name, final T obj, final long expireTime) {
@@ -118,8 +118,6 @@ public class SimpleCache<T> {
 	 * 
 	 * @param name
 	 *            the name of the object you'd like to get
-	 * @param type
-	 *            the type of the object you'd like to get
 	 * @return the object for the given name and type
 	 */
 	public T get(final String name) {

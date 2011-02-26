@@ -51,7 +51,8 @@ public abstract class BuildingBlockRecommender implements Recommender {
 				URI uri = new URIImpl(element);
 				if (!uriList.contains(uri)) {
 					resultList.add(uri);
-					if (log.isInfoEnabled()) log.info(uri + ", weight: " + weight);
+					if (log.isInfoEnabled())
+						log.info(uri + ", weight: " + weight);
 				}
 			}
 		}
@@ -71,11 +72,5 @@ public abstract class BuildingBlockRecommender implements Recommender {
 		}
 		return pattern;
 	}
-
-	//TODO it may be used to optimise the size of the files for the recommender
-//	protected String uriToFeature(URI uri) {
-//		String[] chunks = uri.toString().split("/");
-//		return chunks[chunks.length - 2].charAt(0) + chunks[chunks.length - 1];
-//	}
 
 }

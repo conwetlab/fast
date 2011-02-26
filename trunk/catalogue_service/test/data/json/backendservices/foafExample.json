@@ -1,6 +1,5 @@
 {
     "id":"300",
-    "name":"FOAF example",
     "code":"http://some-url.html",
     "creator":"admin",
     "description":{
@@ -37,6 +36,14 @@
         {
             "name":"getList",
             "preconditions":[
+		        {
+		            "id":"list",
+		            "label":{
+		                "en-gb":"A FOAF person"
+		            },
+		            "pattern":"?person http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://xmlns.com/foaf/0.1/Person",
+		            "positive":"true"
+		        }
             ],
             "uses":[
                 

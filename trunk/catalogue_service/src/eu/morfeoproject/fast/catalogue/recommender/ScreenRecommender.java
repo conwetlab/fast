@@ -10,15 +10,18 @@ import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
 
 public class ScreenRecommender extends BuildingBlockRecommender {
 	
-	public ScreenRecommender(Catalogue catalogue) {
+	public ScreenRecommender(Catalogue catalogue, String path) {
 		super(catalogue);
-		this.params.set("input", "/home/ismriv/mahout-experiments/fpgrowth/screen-input.dat");
+		this.params.set("input", path + "/fpgrowth/screen-input.dat");
 		this.params.set("encoding", "utf-8");
-		this.params.set("output", "/home/ismriv/mahout-experiments/fpgrowth/screen-output.dat");
+		this.params.set("output", path + "/fpgrowth/screen-output.dat");
 		this.fpgrowth = new FPGrowth(this.params);
 	}
 	
 	public void rebuild() {
+		if (log.isInfoEnabled()) {
+			log.info("Rebuilding recommendations for screens");
+		}
 		try {
 			// generates input file reading the screen info from the catalogue
 			FileWriter fstream = new FileWriter(this.params.get("input"));

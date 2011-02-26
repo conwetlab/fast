@@ -42,8 +42,8 @@ public class Accept {
 	 * href="http://www.w3.org/Protocols/HTTP/HTRQ_Headers.html#z3"
 	 * >http://www.w3.org/Protocols/HTTP/HTRQ_Headers.html#z3</a>
 	 * 
-	 * @param acceptList
-	 *            Accept list from the request.
+	 * @param request
+	 *            the request.
 	 */
 	public Accept(HttpServletRequest request) {
 		List<String> acceptList = Util.getHeader(request, "accept");
@@ -99,8 +99,8 @@ public class Accept {
 	}
 
 	/**
-	 * @returns the dominating accept content type. May be null if the client
-	 *          didn't send any "accept" values.
+	 * @return the dominating accept content type. May be null if the client
+	 *         didn't send any "accept" values.
 	 */
 	public String getDominating() {
 		return dominating == null ? null : dominating.contentType;

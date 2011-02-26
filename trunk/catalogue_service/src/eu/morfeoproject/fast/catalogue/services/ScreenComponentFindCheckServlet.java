@@ -559,9 +559,9 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	/**
 	 * Returns the pipe which connects a (screen) postcondition to any other screen component, null in
 	 * case there is no pipe connecting it
-	 * @param precondition
+	 * @param postcondition
 	 * @param pipes
-	 * @return
+	 * @return pipe which connects to the postcondition
 	 */
 	public Pipe getPipeToPostcondition(Condition postcondition, List<Pipe> pipes) {
 		for (Pipe pipe : pipes) {

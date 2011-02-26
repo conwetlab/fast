@@ -1,0 +1,7 @@
+{
+	"canvas": [
+		{ "uri": "<screenA>" },
+		{ "uri": "<screenB>" }
+	],
+	"goal": "<screenA>"
+}

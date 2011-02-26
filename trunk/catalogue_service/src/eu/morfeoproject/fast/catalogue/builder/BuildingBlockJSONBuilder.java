@@ -85,7 +85,7 @@ public class BuildingBlockJSONBuilder {
 	 *   <li>Object can be a variable or a URI</li>
 	 * </ul>
 	 * @param conditionsArray
-	 * @return
+	 * @return list of constructed conditions
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
