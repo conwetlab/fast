@@ -1,3 +1,5 @@
+%!TEX root = fast_d2_4_3_mediation.tex
+
 \lstset{
 captionpos=b, 
 extendedchars=true,
@@ -16,24 +18,17 @@ morecomment=[l]{\#},
 morestring=[b]",
 }
 
-% \begin{abstract}
-% The FAST environment allows users to graphically compose intelligent, i.e. semantically annotated gadgets from predefined building blocks and deploy them on various mashup platforms, thus enabling the interconnection of different systems and services. Since different parties involved in the creation of gadgets and building blocks conceptualise knowledge in different ontologies, using ontology matching as a means to reconcile differences in the various conceptualisations is a crucial issue.
-% This paper discusses first steps in our effort to integrate ontology matching in an end-user-oriented environment such as FAST, using an e-commerce-related scenario. We evaluate a number of tools and approaches for solving different levels of complexity in ontology matching and 
-% %, which we address in this paper. We present a scenario of interconnecting e-commerce web services within a FAST gadget, the ontologies created to represent those services and the alignment tool and language used to generate and represent the ontology mappings. The testing aims firstly, to find out whether and how state-of-the-art ontology matching makes it possible to mash-up different systems and secondly, to 
-% define the direction of integrating ontology matching into the FAST environment.
-% 
-% \keywords{Ontology Matching, User-oriented, Mashups, E-commerce}
-% \end{abstract}
-
 \section{Overview}
 \label{sec:overview}
+
+In this section, we introduce some general terminology and definitions regarding ontology matching, as well as positioning ontology matching in FAST in terms of user roles.
 
 \subsection{Ontology Matching}
 \label{mediation}
 
-FAST uses ontologies to conceptualise the underlying resources used by the different components.
+FAST uses ontologies to conceptualise resources and data used by the different components.
 Ontologies embody the fundamental vehicle for conceptualising data on semantic systems; they describe the context and semantic background of data that should be known to all agents using it~\cite{gruber93towards}.
-However, different ontologies are often used to describe the same domain or cover the same scenario. This is also true for FAST, where gadget building blocks can originate from different providers, who might use different ontologies to describe them. To ensure interoperability, the task of ontology matching is therefore critical in FAST.
+However, different ontologies are often used to describe the same domain or cover the same scenario. This is also true for FAST, where gadget building blocks can originate from different providers, who might use different ontologies to describe them. To ensure interoperability, the task of ontology matching is therefore important in FAST.
 
 Given two ontologies $O$ and $O'$ that need to be mapped to each other, we adopt the definition given in~\cite{shvaiko2005schema_based}: an ontology mapping element is a 5-tuple $<id, e, e', n, R>$, where 
 %\begin{inparaenum}[(i)]
@@ -62,18 +57,22 @@ The alignment operation determines the mapping $M'$ for a pair of ontologies $O$
 \subsection{Ontology Matching in FAST}
 \label{ominfast}
 
-The gadget life cycle in FAST has several phases and roles associated, as detailed in \cite{hoyer-fast}. Here, we list the ones relevant for the ontology matching tasks, in decreasing order of the measure in which knowledge about ontologies is required. Note that several roles can be played by the same actor.
+As detailed in \cite{hoyer2009fast}, the gadget life cycle in FAST has several phases and roles associated. Here, we list the ones relevant for the ontology matching tasks, in decreasing order of the measure in which knowledge about ontologies is required. Note that several roles can be played by the same actor.
 \begin{enumerate}[(i)]
-    \item The \textit{ontology engineer} creates the ontologies used to annotate services and data. This role also includes the process of ontology matching, either automated or manually, determining if the alignment is feasible and creating so-called \emph{matching operator} building blocks, which are basic elements of the FAST gadget building. The \textit{resource developer} then uses these ontologies to annotate resources created in FAST, which resources will be used by the \textit{screen developer}, who will also specify the resource type at the pre- and postconditions of a screen.
+    \item The \textit{ontology engineer} creates the ontologies used to annotate services and data. This role also includes the process of ontology matching, either automated or manually, determining if the alignment is feasible and creating so-called \emph{matching operator} building blocks, which are basic elements of the FAST gadget building. The \textit{resource developer} then uses these ontologies to annotate resources created in FAST, which resources will be used by the \textit{screen developer}, who will also specify the resource type at the pre- and postconditions of a screen. These three roles are the most critical in FAST with respect to ontology matching, and topics relevant to these roles will be discussed in detail in Sect.~\ref{sec:ontologyengineering}.
     \item Ontology matching is needed by the \textit{gadget developer} at the design-time of a screen-flow (gadget). Gadget developers use the GVS (Gadget Visual Storyboard) for building gadgets, where they can use the matching operators to combine screens having input and output conditions specifying resources annotated with different ontologies. No actual matching needs to be performed in this phase, but rather the possibility of matching needs to be determined (i.e., \emph{can} two screens A and B be combined?).
 %the FAST user interface determines if two resources can be combined or not (see Figure \ref{fig:screens} for a conceptual example of resources that can not be combined).
+Section~\ref{sec:gadgetbuilding} outlines how the gadget developer if affected by ontology matching.
     %\item The \emph{gadget developer} combines screens to screen-flows and gadgets, and only uses ontology matching implicitly.
     \item The \textit{end-user} uses the final deployed gadget at run-time, but is unaware of the underlying resources and ontologies or the matching process. Only at run-time the actual mapping of instance data has to be performed.
+This aspect of ontology matching is briefly discussed in Sect.~\ref{sec:runtime}.
 \end{enumerate}
 
 
 \section{Ontology Engineering Phase}
 \label{sec:ontologyengineering}
+
+In the FAST lifecycle, the ontology engineering phase is the most relevant for the topic of this deliverable. Relevant roles are the ontology engineer, who performs the main work in this phase, as well as the the resource developer and the screen developer, who are directly affected.
 
 \subsection{Alignment Tool}
 \label{alignmenttool}
@@ -420,7 +419,8 @@ gr:typeOfGood a align:Relation .
 
 Using this representation, complex correspondences can be modelled, using first order logic constructs.
 
-\subsection{Facts Transformation Tool}
+\subsection{Fact Transformation Tool}
+\label{sec:fact_tool}
 
 To support manual ontology mapping, we have developed a rule based, interactive Facts Transformation Tool. This tool utilizes techniques of our service wrapper tool, cf. deliverable D4.3.2. One part of the service wrapper tool deals with a rule based approach for the transformation of server responses into FAST facts. This problem is closely related to the problem of ontology mediation. Thus, these techniques also allow to create data transformation operators, i.e. operators that mediate between two ontologies.
 
@@ -448,16 +448,25 @@ So far our transformation rules are restricted to simple cases. We have focused 
 
 \begin{figure}
   \begin{center}
-\includegraphics[angle=90,width=0.8\linewidth]{images/FactsTransformationToolGVSWithTransformationRules.png}
-    \caption{Interactive, rule based transforming of Person facts (photoshoped screen dump)}
+\includegraphics[width=\linewidth]{images/FactsTransformationToolGVSWithTransformationRules.png}
+    \caption{Interactive, rule-based transformation of Person facts}
     \label{fig:FactsTransformationToolTransformationRules}
   \end{center}
 \end{figure}
 
 
 \subsection{Creating the Operator}
+\label{sec:creating_the_operator}
 
-Once the data transformation operator has been defined, it may be added to the FAST catalogue in order to allow its use for the definition of piping configurations of new screens within the FAST CGS tool. For this purpose a simple semantic description is sent to the FAST catalogue defining the semantics of the operator and the semantics of its pre- and postconditions.
+Once the data transformation operator has been defined, it may be added to the FAST catalogue in order to allow its use for the definition of piping configurations of new screens within the FAST GVS tool. For this purpose a simple semantic description is sent to the FAST catalogue defining the semantics of the operator and the semantics of its pre- and postconditions. This is shown in Fig.~\ref{fig:operator_in_screen_builder}, where the newly created operator for mediating between Person and Customer concepts (i.e., transforming instances of one concepts into instances of the other) has been saved and is now available in the GVS screen builder interface. 
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=.6\linewidth]{images/operator_closeup}
+    \caption{A newly created operator in the GVS screen builder}
+    \label{fig:operator_in_screen_builder}
+  \end{center}
+\end{figure}
 
 The Service Wrapper Tool uses its own repository for trees of transformation rules. First of all this has technical reasons: the development of the transformation tool is based on a reference architecture and libraries for web based interactive systems provided by Kassel University, cf. \cite{AsDH2009CVSM}. This repository has the special advantage that it provides support for teams of developers, thus the service wrapper tool allows to merge the contributions of multiple developers. 
 

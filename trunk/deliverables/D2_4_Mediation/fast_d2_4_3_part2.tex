@@ -1,8 +1,11 @@
-\section{Ontologies}
+\section{Ontology Mediation Background}
+\label{sec:background}
+
+\subsection{Ontologies}
 \label{sec:ontologies}
 This section provides a brief introduction to the concept of ontologies.
 
-\subsection{Definitions}
+\subsubsection{Definitions}
 As specified in \cite{gruber2008ontology} {\textquotedblleft}an ontology defines a
 set of representational primitives with which to model a domain of
 knowledge or discourse{\textquotedblright}. These primitives are
@@ -42,7 +45,7 @@ a group of people and it is used in a shared environment to allow a
 common conceptualisation of data. 
 \end{enumerate}
 
-\subsection{General Description}
+\subsubsection{General Description}
 An ontology is used to define the vocabulary that agents use to exchange
 queries and assertions. If an agent commits to a common ontology, it
 guarantees the consistency (but not completeness) of the queries and
@@ -100,7 +103,7 @@ case of several ontologies conceptualising a similar domain of the real
 world in different ways.
 
 
-\section{The Mediation Problem} %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Mediation Problem} %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:mediationproblem}
 Ontologies are employed as explicit descriptions of the information
 source semantics. According to \cite{wache2001ontology_information_integration}, integrating these
@@ -134,7 +137,7 @@ in Section \ref{subsec:mediationproblem_motivatingexample}, and a formal descrip
 process, respectively, in Section \ref{subsec:mediationproblem_problemstatement}. After that we show some examples
 of ontology mediation in Section \ref{subsec:mediationproblem_examples}.
 
-\subsection{Motivating Example}
+\subsubsection{Motivating Example}
 \label{subsec:mediationproblem_motivatingexample}
 This section presents a brief example, illustrating a problem that
 presents the need for ontology mediation. 
@@ -247,7 +250,7 @@ data instances of one of these ontologies into the other one, or that
 automatically handle their semantic relations under an integrated
 ontology. 
 
-\subsection{Problem Statement}
+\subsubsection{Problem Statement}
 \label{subsec:mediationproblem_problemstatement}
 Given two ontologies \texttt{o} and
 \texttt{o{\textquotesingle}} that need to be mapped to
@@ -317,7 +320,7 @@ having a certain attribute, like in the case of the concept
 from \texttt{O1} being mapped to the concept
 \texttt{woman} from \texttt{O2}. 
 
-\subsection{Mediation Examples}
+\subsubsection{Mediation Examples}
 \label{subsec:mediationproblem_examples}
 We present two further examples to better illustrate the use of ontology
 mediation. 
@@ -379,7 +382,7 @@ using the formula \texttt{wsim=ws*wsim+(1-ws)*lsim}, where
 \texttt{ws} is the interval [0,1]). 
 
 
-\section{Ontology Mismatches}
+\subsection{Ontology Mismatches}
 \label{sec:ontologymismatches}
 Ontology mismatches are the main obstacles in the combined use of
 independently developed ontologies. We will now give an overview of the
@@ -400,7 +403,7 @@ In this section we discuss the overlap and mismatches between concepts,
 relations, attributes and instances. We will detail the two levels of
 mismatches and the different types that occur at each level. 
 
-\subsection{Language Level Mismatches}
+\subsubsection{Language Level Mismatches}
 \label{subsec:ontologymismatches_languagelevel}
 We define four types of mismatches, although they often coincide. These
 occur when ontologies written in different languages are combined. We
@@ -410,7 +413,7 @@ established that in practice we will not very often find ontologies
 written in different languages anymore, but we discuss them briefly to
 give a better overview of the meditation problem. 
 
-\subsubsection{Syntax}
+\paragraph{Syntax}
 Different languages obviously use different syntax. Therefore the same
 concept can (and will be) often modeled in a completely different way.
 For example, the concept of chairs would be defined in RDF Schema as
@@ -425,7 +428,7 @@ several syntactical forms.
 The solution is to simply to have a rewrite mechanism that returns the
 corresponding translated form. 
 
-\subsubsection{Logical representation}
+\paragraph{Logical representation}
 A slightly more complicated mismatch is when a logical notion can not be
 represented in a given language. For example, in certain languages it
 is possible to assert that two classes are disjoint, say using
@@ -441,7 +444,7 @@ concept).
 Solving this mismatch is relatively-easy: it consists in finding
 translation rules to transform one representation into another. 
 
-\subsubsection{Semantics of primitives}
+\paragraph{Semantics of primitives}
 This difference is a more subtle one, and occurs at the meta-model of
 the language. It sometimes occurs that the semantics of an identical
 name differs from language to language. For example, the expression
@@ -454,7 +457,7 @@ For example, the OIL RDF syntax interprets several
 as the intersection of the arguments, whereas RDF Schema interprets
 them as the union of the arguments. 
 
-\subsubsection{Language expressiveness}
+\paragraph{Language expressiveness}
 This mismatch, at the meta-model level of the languages, is the one
 having the greatest impact on the attempt to combine and reconcile
 ontologies. 
@@ -468,7 +471,7 @@ These type of mismatches have the greatest impact, and are sometimes
 mentioned as the {\textquotedblleft}fundamental
 differences{\textquotedblright} between knowledge models. 
 
-\subsection{Ontology Level Mismatches}
+\subsubsection{Ontology Level Mismatches}
 \label{subsec:ontologymismatches_ontologylevel}
 Mismatches at the model level happen both in the case of having the two
 ontologies written in the same language and syntax and in the case of
@@ -476,7 +479,7 @@ different languages. We can distinguish between several types of
 ontology level mismatches. 
 
 A conceptualisation mismatch is a difference in how the domain is
-modeled (conceptualised), therefore we will have different concepts and
+modelled (conceptualised), therefore we will have different concepts and
 different relations between them. Explication mismatches are
 differences in the way the concepts are specified. These occur as
 mismatches in definitions, or terms, or the combination of the two.
@@ -488,7 +491,7 @@ These kinds of mismatches are likely to occur in the context of FAST and
 are therefore important factors in the implementation of ontology
 mediation in FAST. 
 
-\subsubsection{Conceptualisation Mismatches}
+\paragraph{Conceptualisation Mismatches}
 These are differences in the conceptualisation of the domain, that is
 not only the specification differs in the two ontologies, but the model
 as well. 
@@ -513,10 +516,10 @@ few categories for trucks, and another third ontology could make very
 detailed distinction between all the types of trucks and their
 properties. 
 
-\subsubsection{Explication Mismatches}
+\paragraph{Explication Mismatches}
 The first two types of explication mismatches (\textit{paradigm} and
 \textit{concept description}) result from the \textbf{style of
-modeling.} The next two types (\textit{synonym terms} and
+modelling.} The next two types (\textit{synonym terms} and
 \textit{homonym terms}) can be classified as \textbf{terminological
 mismatches}. Finally, there is one trivial difference, cause by
 \textit{encoding} mismatches. 
@@ -582,7 +585,7 @@ These kind of mismatches can very easily be solved, by using a wrapper,
 or a single transformation step. 
 
 
-\section{Ontology Mediation Approaches}
+\subsection{Ontology Mediation Approaches}
 \label{sec:mediationapproaches}
 In this section we give an overview of some of the major approaches to
 ontology mediation, following the structure of Section 2: Approaches in
@@ -596,7 +599,7 @@ Further research is needed to decide on the type of ontology mediation
 to be used in the context of FAST, the algorithms and approaches
 applied, and whether to use alignment or merging. 
 
-\subsection{Ontology Mapping}
+\subsubsection{Ontology Mapping}
 \label{subsec:mediationapproaches_ontologymapping}
 An ontology mapping is a declarative specification of the semantic
 overlap between two ontologies \cite{debruin2005wsml}. It is the
@@ -758,7 +761,7 @@ contains the snapshot of an activity at a moment in time;
 activity; 
 \item \texttt{objects} , things that do not possess
 temporal properties, but may participate in certain activities at given
-timepoints. 
+time points. 
 \end{itemize}
 \subparagraph{RDFT.}
 The basic RDFT class is \texttt{Bridge }that connects two
@@ -886,7 +889,7 @@ interpretation. Thus, it is possible to have contradicting axioms or
 unsatisfiable ontologies in the local models, without having the entire
 context space unsatisfiable. 
 
-\subsection{Ontology Alignment}
+\subsubsection{Ontology Alignment}
 \label{subsec:mediationapproaches_ontologyalignment}
 \subsubsection{The Match Operator}
 Ontology alignment is the process of discovering similarities between
@@ -912,7 +915,7 @@ match candidates, which the user can accept, reject, or change.
 Furthermore the user should be able to specify matches for elements for
 which the system was unable to find satisfactory match candidates. 
 
-\subsubsection{The Alignment Process}
+\paragraph{The Alignment Process}
 The alignment process proposed in \cite{debruin2005wsml} relieves the user of
 some of the burdens in creating the mappings. The input of the process
 consists of two ontologies which are to be aligned. The output is a set
@@ -964,7 +967,7 @@ of the two ontologies. We cannot expect all correspondences to be
 discovered, therefore the results of the alignment process can be
 considered as the input to a manual refinement process. 
 
-\subsubsection{Classification of Approaches}
+\paragraph{Classification of Approaches}
 An implementation of Match may use multiple matching algorithms or
 \textit{matchers. }This allows us to select matchers according to the
 application domain or schema types. 
@@ -1158,7 +1161,7 @@ in \texttt{O1} as a match candidate for
 \texttt{{\textquotedblleft}HP{\textquotedblright}} does
 not often occur in instances of \texttt{O1}. 
 
-\subsubsection{Overview of Approaches}
+\paragraph{Overview of Approaches}
 In this section we give a brief overview of some of the main approaches
 to ontology alignment. 
 
@@ -1282,7 +1285,7 @@ similarity measure.
 The output of one iteration of QOM can be used as part of the input of a
 subsequent iteration in order to refine the result. After a number of
 iterations the actual mapping between the ontologies is obtained. 
-\subsubsection{Alignment Examples}
+\paragraph{Alignment Examples}
 This section provides a few examples of the matching
 process{\textquotesingle} results.
 \begin{center}
@@ -1448,7 +1451,7 @@ ontology \texttt{O2}, but only for humans having the
 gender
 {\textquotedblleft}\texttt{female}{\textquotedblright}.
 
-\subsection{Ontology Merging}
+\subsubsection{Ontology Merging}
 \label{subsec:mediationapproaches_ontologymerging}
 Ontology merging is the creation of a new ontology from one or more
 source ontologies. The new ontology will unify and in general replace
@@ -1467,7 +1470,7 @@ bridge ontology that imports the original ontologies and relates the
 overlapping concepts in these ontologies using bridge axioms. We
 describe PROMPT and OntoMerge in more detail below. 
 
-\subsubsection{PROMPT}
+\paragraph{PROMPT}
 \label{subsubsec:mediationapproaches_ontologymerging_PROMPT}
 PROMPT \cite{noy2000prompt} is an algorithm and interactive tool for
 ontology merging and alignment. It was one of the first ontology
@@ -1509,7 +1512,7 @@ slot-value restrictions that violate class inheritance.
 The result of the algorithm is a new ontology which replaces the
 original ones. 
 
-\subsubsection{OntoMerge}
+\paragraph{OntoMerge}
 OntoMerge \cite{dou2002ontology_translation} is an online ontology translation system,
 which translates a dataset to a new dataset which captures the same
 information in a different ontology. 
