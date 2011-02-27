@@ -92,7 +92,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ArrayList<ScreenComponent> canvas = new ArrayList<ScreenComponent>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
-				URI uri = new URIImpl(((JSONObject) jsonCanvas.get(i)).getString("uri"));
+				URI uri = new URIImpl(jsonCanvas.getJSONObject(i).getString("uri"));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null || sc.getPrototype() == null)
 					throw new BuildingBlockException(uri+" does not exist or may not be a clone of a prototype.");

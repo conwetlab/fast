@@ -37,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.Constants;
@@ -85,7 +86,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			JSONArray jsonScreens = jsonCanvas.optJSONArray("screens");
 			for (int i = 0; jsonScreens != null && i < jsonScreens.length(); i++) {
 				JSONObject jsonScreen = jsonScreens.getJSONObject(i);
-				URI uri = rdfFactory.createURI(jsonScreen.getString("uri"));
+				URI uri = new URIImpl(jsonScreen.getString("uri"));
 				Screen screen = getCatalogue().getScreen(uri);
 				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
@@ -109,7 +110,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			ArrayList<Screen> palette = new ArrayList<Screen>();
 			JSONArray jsonPalette = input.optJSONArray("palette");
 			for (int i = 0; jsonPalette != null && i < jsonPalette.length(); i++) {
-				URI uri = rdfFactory.createURI(jsonPalette.getJSONObject(i).getString("uri"));
+				URI uri = new URIImpl(jsonPalette.getJSONObject(i).getString("uri"));
 				Screen screen = getCatalogue().getScreen(uri);
 				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");

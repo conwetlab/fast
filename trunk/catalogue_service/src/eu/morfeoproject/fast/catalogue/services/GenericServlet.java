@@ -40,7 +40,6 @@ public abstract class GenericServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	protected final Log log = LogFactory.getLog(this.getClass());
-	protected RDFFactory rdfFactory = new MyRDFFactory();
 	
 	protected Catalogue getCatalogue() {
 		return (Catalogue) getServletContext().getAttribute("catalogue");
