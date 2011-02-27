@@ -1,5 +1,5 @@
 
-This is the README for the FAST Catalogue prototype! 
+This is the README for the FAST Catalogue prototype
 
 For more information on the project in general see: 
 
@@ -10,9 +10,9 @@ http://fast.morfeo-project.eu/
 Installation of the Catalogue server
 ####################################
 
-Place the WAR catalogue file (Catalogue-X.Y-dev.war) into the webapps Tomcat 
+Place the WAR catalogue file (FASTCatalogue-3.0-stable.war) into the webapps Tomcat 
 directory. Then the service will be up and running, and it can be access at
-http://localhost:8080/Catalogue-X.Y-dev/ (depending on the Tomcat configuration).
+http://localhost:8080/FASTCatalogue-3.0-stable/ (depending on the Tomcat configuration).
 
 Please, be sure you start the Tomcat service allowing encoded URLs. To do that,
 add the following property using the JAVA_OPTS parameter:
