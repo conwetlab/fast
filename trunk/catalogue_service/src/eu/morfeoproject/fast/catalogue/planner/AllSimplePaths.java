@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2008-2011, FAST Consortium
+ * Copyright (c) 20O08-2011, FAST Consortium
  * 
  * This file is part of FAST Platform.
  * 
@@ -37,17 +37,17 @@ public class AllSimplePaths<V> {
     public List<LinkedList<V>> findAllPaths(V s, V t) {
     	LinkedList<LinkedList<V>> allPaths = new LinkedList<LinkedList<V>>();
     	path = new LinkedList<V>();
-    	findAllPaths(allPaths, s, t);
+    	breadthFirst(allPaths, s, t);
     	return allPaths;
     }
     
     @SuppressWarnings("unchecked")
-	private void findAllPaths(List<LinkedList<V>> allPaths, V s, V t) {
-        // add node s to current path
-        path.addLast(s);
+	private void breadthFirst(List<LinkedList<V>> allPaths, V node1, V node2) {
+        // add node1 to current path
+        path.addLast(node1);
 
-        // found path from s to t
-        if (s.equals(t)) {
+        // found path from node1 to node2
+        if (node1.equals(node2)) {
         	LinkedList<V> newPath = new LinkedList<V>();
         	newPath.addAll(path);
         	allPaths.add(newPath);
@@ -55,14 +55,14 @@ public class AllSimplePaths<V> {
 
         // consider all neighbors that would continue path without repeating a node
         else {
-            List<V> neighbors = graph.neighbors(s);
-            for (V n : neighbors) {
-                if (!path.contains(n)) findAllPaths(allPaths, n, t);
+            List<V> adjacent = graph.adjacentNodes(node1);
+            for (V adj : adjacent) {
+                if (!path.contains(adj)) breadthFirst(allPaths, adj, node2);
             }
         }
 
         // done exploring from node, so remove from path
         path.removeLast();
     }
-
+    
 }

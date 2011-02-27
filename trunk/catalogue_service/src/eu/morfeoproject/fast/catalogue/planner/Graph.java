@@ -26,11 +26,11 @@ import java.util.List;
 
 public interface Graph<V> {
 
-    public void addEdge(V from, V to);
-    public void removeEdge(V from, V to);
-    public void addNode(V node);
+    public void addEdge(V node1, V node2);
+    public void addTwoWayVertex(V node1, V node2);
+    public void removeEdge(V node1, V node2);
     public void removeNode(V node);
-    public List<V> neighbors(V node);
+    public List<V> adjacentNodes(V node);
     public void clear();
 
 }

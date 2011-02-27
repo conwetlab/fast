@@ -23,7 +23,6 @@
 package eu.morfeoproject.fast.catalogue.planner;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Statement;
@@ -43,28 +42,32 @@ public class CatalogueGraph implements Graph<URI> {
 		this.catalogue = catalogue;
 	}
 
-    public void addEdge(URI from, URI to) {
-    	catalogue.getTripleStore().addStatement(PLANNER_GRAPH, to, SATISFIED_BY, from);
+	@Override
+    public void addEdge(URI node1, URI node2) {
+    	catalogue.getTripleStore().addStatement(PLANNER_GRAPH, node2, SATISFIED_BY, node1);
     }
     
-    public void removeEdge(URI from, URI to) {
-    	catalogue.getTripleStore().removeStatements(PLANNER_GRAPH, from, SATISFIED_BY, to);
-    }
-
-    public List<URI> neighbors(URI uri) {
-    	LinkedList<URI> neighbors = new LinkedList<URI>();
-    	ClosableIterator<Statement> cIt = catalogue.getTripleStore().findStatements(PLANNER_GRAPH, uri, SATISFIED_BY, Variable.ANY);
-    	while (cIt.hasNext()) {
-    		neighbors.add(cIt.next().getObject().asURI());
-    	}
-    	cIt.close();
-    	return neighbors;
+	@Override
+    public void addTwoWayVertex(URI node1, URI node2) {
+        addEdge(node1, node2);
+        addEdge(node2, node1);
     }
 
 	@Override
-	public void addNode(URI node) {
-		// NOT NEEDED
-	}
+    public void removeEdge(URI node1, URI node2) {
+    	catalogue.getTripleStore().removeStatements(PLANNER_GRAPH, node1, SATISFIED_BY, node2);
+    }
+
+	@Override
+    public LinkedList<URI> adjacentNodes(URI node) {
+    	LinkedList<URI> adjacent = new LinkedList<URI>();
+    	ClosableIterator<Statement> cIt = catalogue.getTripleStore().findStatements(PLANNER_GRAPH, node, SATISFIED_BY, Variable.ANY);
+    	while (cIt.hasNext()) {
+    		adjacent.add(cIt.next().getObject().asURI());
+    	}
+    	cIt.close();
+    	return adjacent;
+    }
 
 	@Override
 	public void removeNode(URI node) {
