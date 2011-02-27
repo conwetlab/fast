@@ -39,7 +39,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
-import eu.morfeoproject.fast.catalogue.MyRDFFactory;
+import eu.morfeoproject.fast.catalogue.SimpleRDFFactory;
 import eu.morfeoproject.fast.catalogue.RDFFactory;
 import eu.morfeoproject.fast.catalogue.model.Action;
 import eu.morfeoproject.fast.catalogue.model.BackendService;
@@ -61,7 +61,7 @@ import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 public class BuildingBlockJSONBuilder {
 
 	protected static final Log log = LogFactory.getLog(BuildingBlockJSONBuilder.class);
-	protected static final RDFFactory rdfFactory = new MyRDFFactory();
+	protected static final RDFFactory rdfFactory = new SimpleRDFFactory();
 
 	public static ScreenFlow buildScreenFlow(JSONObject json, URI uri) throws JSONException, IOException {
 		ScreenFlow sf = BuildingBlockFactory.createScreenFlow(uri);

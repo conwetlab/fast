@@ -28,11 +28,11 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
-public class MyRDFFactory implements RDFFactory {
+public class SimpleRDFFactory implements RDFFactory {
 
 	private Model factory;
 	
-	public MyRDFFactory() {
+	public SimpleRDFFactory() {
 		this.factory = RDF2Go.getModelFactory().createModel();
 		this.factory.open();
 	}

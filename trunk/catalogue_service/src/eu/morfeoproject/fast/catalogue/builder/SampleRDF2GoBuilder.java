@@ -34,7 +34,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
-import eu.morfeoproject.fast.catalogue.MyRDFFactory;
+import eu.morfeoproject.fast.catalogue.SimpleRDFFactory;
 import eu.morfeoproject.fast.catalogue.RDFFactory;
 import eu.morfeoproject.fast.catalogue.model.Sample;
 import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
@@ -43,7 +43,7 @@ public class SampleRDF2GoBuilder {
 
 	protected static final Log log = LogFactory.getLog(SampleRDF2GoBuilder.class);
 
-	protected static final RDFFactory factory = new MyRDFFactory();
+	protected static final RDFFactory factory = new SimpleRDFFactory();
 
 	public static Sample buildSample(Model model) {
 		return retrieveSample(model);
