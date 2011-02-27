@@ -272,7 +272,6 @@ public abstract class TripleStore {
      * @param ontologyUri URI identifying the ontology in the passed rdf model
      * @param ontology a stream with a serialized form of the ontology
      * @param syntax the rdf syntax
-     * @param URL of the location where the ontology is stored
      * @throws NotFoundException if the passed ontology is not in the store at the moment
      * @throws SailUpdateException if the database breaks
      * @throws OntologyInvalidException if the ontology is not valid according to PimoChecker
