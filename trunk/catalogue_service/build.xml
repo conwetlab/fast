@@ -125,6 +125,7 @@
   </target>
 
   <target name="test" depends="clean, compile">
+  	<mkdir dir="${test.reports.dir}"/>
     <junit printsummary="yes" haltonfailure="no" showoutput="yes" >
       <classpath>
         <pathelement path="${build.dir}/WEB-INF/classes"/>
