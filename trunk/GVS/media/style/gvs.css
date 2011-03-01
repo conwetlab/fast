@@ -917,13 +917,13 @@ h4{
 .view.form.snapshot {
     border: 2px solid #808080;
     padding: 5px;
-    min-width: 0px;
-    min-height: 0px;
+    min-width: 50px;
+    min-height: 55px;
 
 }
 .form.snapshot .image {
     margin: 0px;
-    width: auto;
+    width: 50px;
 
 }
 /*********************
