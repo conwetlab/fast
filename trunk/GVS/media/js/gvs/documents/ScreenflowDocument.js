@@ -243,8 +243,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 "description": {"en-gb": "Please fill the description..."},
                 "rights": "http://creativecommons.org/",
                 "creationDate": null,
-                "icon": "http://fast.morfeo-project.eu/icon.png",
-                "screenshot": "http://fast.morfeo-project.eu/screenshot.png",
+                "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/icon.png",
+                "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshot.png",
                 "homepage": "http://fast.morfeo-project.eu/"
             };
         }
