@@ -384,9 +384,9 @@ var FormBuilder = (function() {
             default:
                 throw "Unimplemented form field type";
         }
-        if (inputNode) {
-            $H(events).each(function(pair) {
-                Element.observe(input, pair.key, pair.value);
+        if (inputNode && line.events) {
+            $H(line.events).each(function(pair) {
+                Element.observe(inputNode, pair.key, pair.value);
             });
         }
         return lineNode;
@@ -414,17 +414,21 @@ var FormEditor = Class.create({
                 height:'100%',
                 padding:'5px 20px'
             });
-         this.update();
+        this.update();
     },
 
     save: function() {
         var form = this._form.domNode;
-        var name = Utils.sanitize($F(form.name))
+            name = Utils.sanitize($F(form.name)),
+            triggers = $F(form.triggers).split(/[\s,]+/).without(''),
+            libraries = $F(form.libraries).split(/[\s,]+/).without(''),
+            tagsNames = $F(form.tags).split(/[\s,]+/).without(''),
+            tags = tagsNames.map(function(tag){return {label:{'en-gb':tag}}; });
         var description = Object.extend({
             'name': name,
-            'tags': $F(form.tags).split(/[\s,]+/).without(''),
-            'triggers': $F(form.triggers).split(/[\s,]+/).without(''),
-            'libraries': $F(form.libraries).split(/[\s,]+/).without(''),
+            'tags': tags,
+            'triggers': triggers,
+            'libraries': libraries,
             'label': { 'en-gb': name },
             'description': { 'en-gb': $F(form.description) },
         }, Form.serializeElements([
@@ -441,47 +445,57 @@ var FormEditor = Class.create({
 
     update: function(data) {
         data = data || this.data;
+        var self = this;
         this._form = FormBuilder.build([
             {'type':'title', 'value': 'Basic information'},
             {'type':'input', 'label': 'Building block name:','name': 'name',
                     'value': data.name,
                     'required': true,
-                    'events': {
-                        'blur': function(){ form.name.value = Utils.sanitize($F(form.name)); }
-                    }
+                    'events': { 'blur': function() { self.save(); } }
             },
             {'type':'input', 'label': 'Version:','name': 'version',
-                    'value': data.version},
+                    'events': {'blur': function(){ self.save(); } },
+                    'value': data.version },
             {'type':'input', 'label': 'Tags:','name': 'tags',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.tags.collect(function(tag) { return tag.label['en-gb']; }).join(", ")},
             {'type': 'title', 'value': 'Sharing information'},
             {'type':'textarea', 'label': 'Description:','name': 'description',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.description['en-gb'],
                     'required': true},
             {'type':'input', 'label': 'Creator:','name': 'creator',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.creator,
                     'required': true,
                     'disabled': true},
             {'type':'input', 'label': 'Licence information:','name': 'rights',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.rights,
                     'required': true},
             {'type':'input', 'label': 'Icon:','name': 'icon',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.icon,
                     'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*',
                     'message': 'Invalid URL'},
             {'type':'input', 'label': 'Screenshot:','name': 'screenshot',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.screenshot,
                     'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*',
                     'message': 'Invalid URL'},
             {'type':'input', 'label': 'Homepage:','name': 'homepage',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.homepage,
                     'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*',
                     'message': 'Invalid URL'},
             {'type':'input', 'label': 'Triggers:','name': 'triggers',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.triggers.join(', ')},
             {'type':'textarea', 'label': 'Parameter Template:','name':'parameterTemplate',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.parameterTemplate },
             {'type':'textarea', 'label': 'Libraries:','name':'libraries',
+                    'events': {'blur': function(){ self.save(); } },
                     'value': data.libraries.join(",\n")}
         ]);
         this.domNode.update(this._form.domNode);
