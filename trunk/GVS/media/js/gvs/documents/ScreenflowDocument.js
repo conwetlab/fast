@@ -865,12 +865,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         $A(paletteNode.childNodes).each(function(element) {
             if (element.match(".slot")) {
 
-                if (element.firstChild.match(".unsatisfeable")) {
+                if (element.childNodes[1].match(".unsatisfeable")) {
                     element.setStyle({
                         "display": visibility
                     });
                 }
-                if (element.firstChild.match(".satisfeable")) {
+                if (element.childNodes[1].match(".satisfeable")) {
                     element.setStyle({
                         "display": "block"
                     });
