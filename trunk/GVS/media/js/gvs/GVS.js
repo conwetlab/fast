@@ -318,35 +318,13 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                 }),
                                 'group': 0
                             },
-                            'newOperator': {
+                            'newBuildingBlock': {
                                 'type': 'Action',
                                 'action': new MenuAction({
-                                    'label': 'Operator',
+                                    'label': 'Building Block from sources',
                                     'weight': 2,
                                     'handler': function(){
-                                        this.action("newOperator");
-                                    }.bind(this)
-                                }),
-                                'group': 1
-                            },
-                            'newForm': {
-                                'type': 'Action',
-                                'action': new MenuAction({
-                                    'label': 'Form',
-                                    'weight': 1,
-                                    'handler': function(){
-                                        this.action("newForm");
-                                    }.bind(this)
-                                }),
-                                'group': 1
-                            },
-                            'newResource': {
-                                'type': 'Action',
-                                'action': new MenuAction({
-                                    'label': 'Resource',
-                                    'weight': 3,
-                                    'handler': function(){
-                                        this.action("newResource");
+                                        this.action("newBuildingBlock");
                                     }.bind(this)
                                 }),
                                 'group': 1
@@ -379,7 +357,18 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                     'handler': function(){
                                         this.action("browseScreens");
                                     }.bind(this),
-                                    'shortcut': 'Alt+N'
+                                    'shortcut': 'Alt+O'
+                                }),
+                                'group': 0
+                            },
+                            'browseBuildingBlocks': {
+                                'type': 'Action',
+                                'action': new MenuAction({
+                                    'label': 'Building Blocks',
+                                    'weight': 15,
+                                    'handler': function(){
+                                        this.action("browseBuildingBlocks");
+                                    }.bind(this)
                                 }),
                                 'group': 0
                             }
