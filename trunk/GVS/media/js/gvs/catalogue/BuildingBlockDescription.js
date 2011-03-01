@@ -174,6 +174,12 @@ var BuildingBlockDescription = Class.create(
         return result;
     },
 
+    getPreview: function() {
+        return new Element('img',  {
+            "src": this["screenshot"]
+        });
+    },
+
     getPostconditionsList: function() {
         return this._getConditionsList("postconditions");
     },
