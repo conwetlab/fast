@@ -64,17 +64,17 @@
 {% endfor %}
         ];
 
-    var _pres{{id}} = [[
+    var _pres{{id}} = [
 {% for and in pres %}
             {id:"{{and.id}}", pattern: "{{and.pattern}}"}{% if not forloop.last %},{% endif %}
 {% endfor %}
-        ]];
+        ];
 
-    var _posts{{id}} = [[
+    var _posts{{id}} = [
 {% for and in posts %}
             {id:"{{and.id}}", pattern: "{{and.pattern}}"}{% if not forloop.last %},{% endif %}
 {% endfor %}
-        ]];
+        ];
 
     ScreenEngineFactory.getInstance("{{id}}").setEngine(ScreenflowEngineFactory.getInstance(), _bb{{id}}, _piping{{id}}, _triggers{{id}}, _pres{{id}}, _posts{{id}});
 
