@@ -101,8 +101,9 @@ BuildingBlockDebugger = (function() {
                 logger.error("Can not open code of the element");
             }
         };
-        var remoteUri = parseUri(uri);
-        if (remoteUri.host + ":" + remoteUri.port == window.location.host) {
+        var remoteUri = parseUri(uri),
+            localUri = parseUri(window.location);
+        if (remoteUri.authority == localUri.authority) {
             new Ajax.Request(uri, Object.extend(callbacks, {method:'get'}));
         } else {
             proxyGet(uri, callbacks);
