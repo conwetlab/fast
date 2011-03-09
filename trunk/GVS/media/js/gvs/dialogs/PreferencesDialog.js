@@ -67,7 +67,7 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
                     'value': user.getEzWebURL(),
                     'regExp': FormDialog.URL_VALIDATION,
                     'message': FormDialog.INVALID_URL_MESSAGE},
-            {'type':'checkbox', 'label': 'Magic Catalogue:',
+            {'type':'checkbox', 'label': 'Smart Palette:',
                     'name': 'catalogueMagic',
                     'checked': user.getCatalogueMagic()},
             {'type':'checkbox', 'label': 'Search iServe services: <br /> (It may be slow)',
