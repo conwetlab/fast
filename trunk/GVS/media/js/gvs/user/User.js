@@ -60,6 +60,9 @@ var User = Class.create( /** @lends User.prototype */ {
          */
         this._ezWebURL = null;
 
+        // Initializes the Cookie for storing local preferences
+        Cookie.init({"name": "GVSUserData", "expires": 10000});
+
 
         /**
          * Defines the magic level of the catalogue.
@@ -68,14 +71,14 @@ var User = Class.create( /** @lends User.prototype */ {
          * @type Boolean
          * @private
          */
-        this._catalogueMagic = false;
+        this._catalogueMagic = Cookie.getData("catalogueMagic") || false;
 
         /**
          * Do you want iserve integration?
          * @private
          * @type Boolean
          */
-        this._iServe = false;
+        this._iServe = Cookie.getData("iserve") || false;
 
         //Bring the user from the server
         this._getUser();
@@ -144,6 +147,7 @@ var User = Class.create( /** @lends User.prototype */ {
      */
     setCatalogueMagic: function(catalogueMagic) {
         this._catalogueMagic = catalogueMagic;
+        Cookie.setData("catalogueMagic", catalogueMagic);
     },
 
     /**
@@ -158,6 +162,7 @@ var User = Class.create( /** @lends User.prototype */ {
      */
     setiServe: function(iServe) {
         this._iServe = iServe;
+        Cookie.setData("iserve", iServe);
     },
 
     /**
@@ -169,8 +174,8 @@ var User = Class.create( /** @lends User.prototype */ {
         this._firstName = userData.firstName;
         this._lastName = userData.lastName;
         this._email = userData.email;
-        this._catalogueMagic = (userData.catalogueMagic !== undefined);
-        this._iServe = (userData.iServe !== undefined);
+        this.setCatalogueMagic((userData.catalogueMagic !== undefined));
+        this.setiServe((userData.iServe !== undefined));
 
         this._ezWebURL = userData.ezWebURL;
 

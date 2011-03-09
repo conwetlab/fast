@@ -191,6 +191,7 @@ file_list = [
     "gvs/utils/Logger.js",
     "gvs/utils/KeyPressRegistry.js",
     "gvs/utils/Geometry.js",
+    "gvs/utils/Cookie.js",
 
     # Constants
     "gvs/commons/Constants.js",
