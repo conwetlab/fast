@@ -36,11 +36,11 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
     },
 
     createInVariable: function (variable, handler) {
-        Logger.log("Created in variable " + variable);
+        logger.log("Created in variable " + variable);
     },
 
     createOutVariable: function (variable) {
-        Logger.log("Created out variable " + variable);
+        logger.log("Created out variable " + variable);
     }
 });
 
@@ -56,7 +56,7 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
     },
 
     call: function() {
-        Logger.log("AJAX call sent");
+        logger.log("AJAX call sent");
         var params = this.options;
 
         var _onSuccess = params.onSuccess;
@@ -81,7 +81,7 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
 
         // This function handles a success in the asynchronous call
         function onSuccess(transport) {
-            Logger.log("Data received from server");
+            logger.log("Data received from server");
             switch(params.content){
                 case 'xml':
                     (_onSuccess || Prototype.emptyFunction)(transport.responseXML);
@@ -144,7 +144,7 @@ FastAPI.Properties = Class.create(FastBaseAPI.Properties,{
 
     set: function (variable, value) {
         this._variables.set(value,variable);
-        Logger.log("Variable " + variable + " has been set to " + value);
+        logger.log("Variable " + variable + " has been set to " + value);
     }
 });
 
@@ -159,11 +159,11 @@ FastAPI.Persistence = Class.create(FastBaseAPI.Persistence,{
     },
 
     get: function (func) {
-        Logger.log("Persistence get called");
+        logger.log("Persistence get called");
     },
 
     set: function (value, func) {
-        Logger.log("Perssistence set called");
+        logger.log("Perssistence set called");
     }
 });
 
@@ -181,7 +181,7 @@ FastAPI.Social = {
         },
 
         authenticate: function(credentials){
-            Logger.log("Social.Login authenticate called");
+            logger.log("Social.Login authenticate called");
         }
     }),
 
@@ -192,17 +192,17 @@ FastAPI.Social = {
         },
 
         get: function(property, func){
-            Logger.log("Social.User get called");
+            logger.log("Social.User get called");
 
 
         },
 
         set: function (property, value) {
-            Logger.log("Social.User set called");
+            logger.log("Social.User set called");
         },
 
         postStatus: function (status) {
-            Logger.log("Social.User postStatus called");
+            logger.log("Social.User postStatus called");
         },
     }),
 
@@ -218,11 +218,11 @@ FastAPI.Social = {
         },
 
         getFriends: function (func) {
-            Logger.log("Social.Friends getFriends called");
+            logger.log("Social.Friends getFriends called");
         },
 
         tellAFriend: function () {
-            Logger.log("Social.Friends tellAFriend called");
+            logger.log("Social.Friends tellAFriend called");
         }
 
     })
