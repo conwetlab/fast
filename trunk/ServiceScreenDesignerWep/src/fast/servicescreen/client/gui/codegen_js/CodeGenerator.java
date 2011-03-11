@@ -777,7 +777,7 @@ public class CodeGenerator
 			depth2 + "var request = prerequest;\n" +
 			
 			//sending/recieving the request
-			depth2 + "//Invoke the service\n" +
+			depth2 + "    //Invoke the service\n" +
 			depth2 + "    new FastAPI.Request(request,{\n" +
 			depth2 + "        'method':       '<<methodType>>',\n" +
 			depth2 + "        'content':      'xml',\n" +

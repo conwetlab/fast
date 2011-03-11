@@ -77,21 +77,30 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 				depth2 + "var prerequest = '<<prerequest>>';\n" +
 				
 				//should replace inports to real values in runtime!
-				depth2 + "<<prerequestreplaces>>\n\n" +
+				depth2 + "<<prerequestreplaces>>\n" +
+				
+				"<<postBodyReplaces>>" + 
 				
 				//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
 				depth2 + "var request = prerequest;\n" +
 				
 				//sending/recieving the request
-				depth2 + "//Invoke the service\n" +
+				depth2 + "    //Invoke the service\n" +
 				depth2 + "    new FastAPI.Request(request,{\n" +
 				depth2 + "        'method':       '<<methodType>>',\n" +
 				depth2 + "        'content':      'json',\n" +
+				
+				"<<contentType>> \n" + 
+				
 				depth2 + "        'context':      theOperator,\n" +
+				
+				"<<postBody>> \n" + 
+				
 				depth2 + "        'onSuccess':    theOperator.addToList\n" +
-				depth2 + "    });\n\n" +
+				depth2 + "    });\n" +
 			depth + "},\n" +
 			depth + "\n" +
+			
 			//next method rump 
 			depth + "addToList: function (transport) \n" +
 			depth + "{ \n" +
