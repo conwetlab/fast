@@ -868,6 +868,7 @@ var formatDescription = (function(){
         delete object.code;
         delete object.codeInline;
         delete object.creationDate;
+        delete object.name;
         object.actions = formatActions(description.actions);
         object.postconditions = formatConditions(description.postconditions);
         return object;
@@ -959,6 +960,7 @@ var updateProperties = (function() {
         object.code         = props.code;
         object.codeInline   = props.codeInline;
         object.creationDate = props.creationDate;
+        object.name         = props.name;
 
         object.name = (object.name && object.name.trim()) || props.name;
 
