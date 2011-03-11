@@ -173,7 +173,10 @@ public class ScreenPlanner extends Cacheable<List<Plan>>  {
 	}
 	
 	private List<Plan> searchPlans(URI uri) {
-		return planner.searchPlans(uri, ROOT_NODE);
+		List<Plan> planList = planner.searchPlans(uri, ROOT_NODE);
+		for (Plan plan : planList)
+			plan.getUriList().remove(ROOT_NODE);
+		return planList;
 	}
 	
 	public void add(Screen screen) {
