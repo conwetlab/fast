@@ -78,7 +78,7 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
             name: 'Forms',
             checked: this._showForms,
             onChange: function(b) {
-                this._showForms = !(this._showForms && (this._showOperators || this._showResources));
+                this._showForms = !this._showForms;
                 this._reload();
             }.bind(this)
         });
@@ -92,7 +92,7 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
             name: 'Operators',
             checked: this._showOperators,
             onChange: function(b) {
-                this._showOperators = !(this._showOperators && (this._showForms || this._showResources));
+                this._showOperators = !this._showOperators;
                 this._reload();
             }.bind(this)
         });
@@ -106,7 +106,7 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
             name: 'Resources',
             checked: this._showResources,
             onChange: function(b) {
-                this._showResources = !(this._showResources && (this._showForms || this._showOperators));
+                this._showResources = !this._showResources;
                 this._reload();
             }.bind(this)
         });
@@ -256,7 +256,7 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
     _reload: function() {
         this._loadBuildinBlocks(function(){
             this._createBuildingBlockList();
-            this._render(false);
+            this._render(true);
         }.bind(this));
     },
 
