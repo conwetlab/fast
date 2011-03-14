@@ -38,21 +38,44 @@ from buildingblock.utils import *
 class BuildingBlockCollection(resource.Resource):
     def read(self, request, bbtype):
         try:
+            if request.GET.get("all", "false") == "true":
+                include_all = True
+            else:
+                include_all = False
+
             user = get_user_authentication(request)
 
             bb = []
             if bbtype == 'screenflow':
-                bb = get_list_or_404(Screenflow, author=user)
+                if include_all:
+                    bb = get_list_or_404(Screenflow)
+                else:
+                    bb = get_list_or_404(Screenflow, author=user)
             elif bbtype == 'screen':
-                bb = get_list_or_404(Screen, author=user)
+                if include_all:
+                    bb = get_list_or_404(Screen)
+                else:
+                    bb = get_list_or_404(Screen, author=user)
             elif bbtype == 'form':
-                bb = get_list_or_404(Form, author=user)
+                if include_all:
+                    bb = get_list_or_404(Form)
+                else:
+                    bb = get_list_or_404(Form, author=user)
             elif bbtype == 'operator':
-                bb = get_list_or_404(Operator, author=user)
+                if include_all:
+                    bb = get_list_or_404(Operator)
+                else:
+                    bb = get_list_or_404(Operator, author=user)
             elif bbtype == 'resource':
-                bb = get_list_or_404(Resource, author=user)
+                if include_all:
+                    bb = get_list_or_404(Resource)
+                else:
+                    bb = get_list_or_404(Resource, author=user)
             else:
-                bb = get_list_or_404(BuildingBlock, author=user)
+                if include_all:
+                    bb = get_list_or_404(BuildingBlock)
+                else:
+                    bb = get_list_or_404(BuildingBlock, author=user)
 
             response = json_encode([simplejson.loads(element.data) for element in bb if element.data])
 

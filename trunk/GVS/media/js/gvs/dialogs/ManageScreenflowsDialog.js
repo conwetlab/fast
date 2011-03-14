@@ -40,6 +40,7 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
          * @private
          */
         this._screenflows = null;
+
     },
 
 
@@ -93,7 +94,8 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
             }, {
                 'value': 'Clone screenflow',
                 'handler': this._cloneScreenflow.bind(this),
-                'disableIfNotValid': true
+                'disableIfNotValid': true,
+                'enableWhenAll': true
             }, {
                 'value': 'Share/Unshare screenflow',
                 'handler': this._shareScreenflow.bind(this)
@@ -154,7 +156,7 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
     _onReLoadSuccess: function(/** XMLHttpRequest */ transport) {
         this._screenflows = JSON.parse(transport.responseText);
         this._createScreenflowList();
-        this._render(false);
+        this._render(true);
     },
 
     /**
@@ -230,7 +232,11 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
      * @private
      */
     _reload: function() {
-        PersistenceEngine.sendGet(URIs.screenflow, this, this._onReLoadSuccess, Utils.onAJAXError);
+        var uri = URIs.screenflow;
+        if (this._showAll) {
+            uri +="?all=true";
+        }
+        PersistenceEngine.sendGet(uri, this, this._onReLoadSuccess, Utils.onAJAXError);
     }
 });
 

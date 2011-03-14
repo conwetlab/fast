@@ -95,7 +95,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
                 'disableIfNotValid': true
             }, {
                 'value': 'Clone screen',
-                'handler': this._cloneScreen.bind(this)
+                'handler': this._cloneScreen.bind(this),
+                'enableWhenAll': true
             }, {
                 'value': 'Share/Unshare screen',
                 'handler': this._shareScreen.bind(this)
@@ -157,7 +158,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     _onReLoadSuccess: function(/** XMLHttpRequest */ transport) {
         this._screens = JSON.parse(transport.responseText);
         this._createScreenList();
-        this._render(false);
+        this._render(true);
     },
 
     /**
@@ -230,7 +231,11 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @private
      */
     _reload: function() {
-        PersistenceEngine.sendGet(URIs.screen, this, this._onReLoadSuccess, Utils.onAJAXError);
+        var uri = URIs.screen;
+        if (this._showAll) {
+            uri +="?all=true";
+        }
+        PersistenceEngine.sendGet(uri, this, this._onReLoadSuccess, Utils.onAJAXError);
     }
 });
 

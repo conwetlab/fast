@@ -1274,6 +1274,9 @@ label {
     border: 1px solid #CCC;
     margin: 5px;
 }
+.gallery .icon img {
+    max-width: 50px;
+}
 .gallery .description {
     margin: 5px;
     position: absolute;
@@ -1303,6 +1306,10 @@ label {
     display: none;
     width: 16px;
 }
+.loadAll {
+    margin-top: 2px;
+    margin-left: 2px;
+}
 
 /**************
  * Search Bar *
@@ -1312,6 +1319,7 @@ label {
     border-top:1px solid #CCC;
     padding-top:3px;
     min-height:8px;
+    overflow: auto;
 }
 
 .searchBar .searchBox {

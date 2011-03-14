@@ -96,6 +96,13 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
          * @private
          */
         this._selectedRow = null;
+
+        /**
+         * Show all elements
+         * @type Boolean
+         * @private
+         */
+        this._showAll = false;
     },
 
 
@@ -165,6 +172,21 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
         var lastSelectedRowKey = this._selectedRow && this._selectedRow['key'];
         this._selectedRow = null;
 
+        if (loadAll && this._rows.size() > 0) {
+            this._removeButtons();
+            this._buttons.each(function(button){
+                var buttonWidget = this._addButton(button.value, function() {
+                    button.handler(this._selectedRow.key);
+                }.bind(this));
+                if (!button.enableWhenAll && this._showAll) {
+                    this._disabledButtons.push({"widget": buttonWidget,
+                    "disabled": true});
+                } else if (button.disableIfNotValid) {
+                    this._disabledButtons.push({"widget": buttonWidget});
+                }
+            }.bind(this));
+        }
+
         this._rows.each(function(row) {
             var rowNode = new Element('div', {
                 'class': 'row'
@@ -184,7 +206,10 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                 this._selectedRow = row;
                 rowNode.addClassName("selected");
                 for (var i = 0; i < this._disabledButtons.length; i++) {
-                    this._disabledButtons[i].attr('disabled', ! row.isValid);
+                    this._disabledButtons[i].widget.attr('disabled', ! row.isValid);
+                    if (this._disabledButtons[i].disabled) {
+                        this._disabledButtons[i].widget.attr('disabled', true);
+                    }
                 }
             }.bind(this);
 
@@ -194,7 +219,9 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                (! this._properties.get('disableIfNotValid') || row.isValid))
             {
                 rowNode.observe('dblclick', function() {
-                    this._properties.get('onDblClick')(row.key);
+                    if (!this._showAll) {
+                        this._properties.get('onDblClick')(row.key);
+                    }
                 }.bind(this));
             }
 
@@ -206,17 +233,6 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
         }.bind(this));
 
 
-        if (loadAll && this._rows.size() > 0) {
-            this._removeButtons();
-            this._buttons.each(function(button){
-                var buttonWidget = this._addButton(button.value, function() {
-                    button.handler(this._selectedRow.key);
-                }.bind(this));
-                if (button.disableIfNotValid) {
-                    this._disabledButtons.push(buttonWidget);
-                }
-            }.bind(this));
-        }
 
         if (this._rows.size() == 0) {
             var info = new Element("div", {
@@ -232,12 +248,16 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
             content.firstChild.addClassName("selected");
             var row = this._selectedRow = this._rows[0];
             for (var i = 0; i < this._disabledButtons.length; i++) {
-                this._disabledButtons[i].attr('disabled', ! row.isValid);
+                this._disabledButtons[i].widget.attr('disabled', ! row.isValid);
+                if (this._disabledButtons[i].disabled) {
+                    this._disabledButtons[i].widget.attr('disabled', true);
+                }
             };
         }
 
         this._setContent(content);
         this._contentNode.appendChild(this._createSearchBar());
+        this._contentNode.appendChild(this._createLoadAll());
     },
 
     /**
@@ -249,7 +269,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                 node.removeClassName("selected");
             });
             this._disabledButtons.each(function(button) {
-                button.attr('disabled', true);
+                button.widget.attr('disabled', true);
             });
             this._selectedRow = null;
     },
@@ -283,6 +303,30 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
 
         searchBar.appendChild(searchBox.getDOMNode());
         return searchBar;
+    },
+
+    /**
+     * Create loadAll section
+     * @private
+     */
+    _createLoadAll: function() {
+        var node = new Element("div", {
+            "class": "loadAll"
+        });
+        var text = new Element("span").update("Show others' building blocks ");
+        node.appendChild(text);
+
+        var checkBox = new dijit.form.CheckBox({
+            name: 'all',
+            checked: this._showAll,
+            onChange: function(b) {
+                this._showAll = !this._showAll;
+                this._reload();
+            }.bind(this)
+        });
+        node.appendChild(checkBox.domNode);
+
+        return node;
     },
 
     /**

@@ -289,7 +289,11 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
         if (!type && onSucess instanceof Function) {
             onSucess.call(context);
         } else {
-            PersistenceEngine.sendGet(URIs[type], context, function(transport) {
+            var uri = URIs[type];
+            if (this._showAll) {
+                uri +="?all=true";
+            }
+            PersistenceEngine.sendGet(uri, context, function(transport) {
                 this._buildingBlocks = this._buildingBlocks.concat(JSON.parse(transport.responseText));
                 this._getBuildingBlocks(types, context, onSucess);
             }, Utils.onAJAXError);
