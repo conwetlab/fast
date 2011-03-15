@@ -1243,7 +1243,7 @@ public class Catalogue {
 		
 		// do a 'copy' of basic data of any building block
 		URI copyUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/" + type + "/clones/");
-		String query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
+		String query = String.format("CONSTRUCT { <copy> ?p ?o } WHERE { GRAPH %s { <bb> ?p ?o } }", prototypesGraph.toSPARQL());
 		query = query.replaceFirst("<copy>", copyUri.toSPARQL());
 		query = query.replaceFirst("<bb>", bb.getUri().toSPARQL());
 		ClosableIterator<Statement> it = tripleStore.sparqlConstruct(query).iterator();
