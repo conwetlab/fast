@@ -33,11 +33,10 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.cache.Cacheable;
 import eu.morfeoproject.fast.catalogue.model.Condition;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 
-public class ScreenPlanner extends Cacheable<List<Plan>>  {
+public class ScreenPlanner {
 	protected final transient Log log = LogFactory.getLog(this.getClass());
 
 	private final URI ROOT_NODE = new URIImpl("urn:root");
@@ -64,14 +63,8 @@ public class ScreenPlanner extends Cacheable<List<Plan>>  {
 		}
 		
 		LinkedList<Plan> planList = new LinkedList<Plan>();
-		List<Plan> cacheList = cache.get(goal.toString());
-		if (cacheList == null) {
-			List<Plan> searchList = searchPlans(goal);
-			planList.addAll(rankList(searchList, uriList));
-			cache.put(goal.toString(), planList);
-		} else {
-			planList.addAll(cacheList);
-		}
+		List<Plan> searchList = searchPlans(goal);
+		planList.addAll(rankList(searchList, uriList));
 		
 		return planList;
 	}
