@@ -31,15 +31,18 @@ import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 public class CatalogueGraph implements Graph<URI> {
 
 	private Catalogue catalogue;
-	private final static URI PLANNER_GRAPH = new URIImpl("urn:planner");
-	private final static URI SATISFIED_BY = new URIImpl("urn:satisfied_by");
+	private URI PLANNER_GRAPH;
+	private URI SATISFIED_BY;
 	
 	public CatalogueGraph(Catalogue catalogue) {
 		this.catalogue = catalogue;
+		PLANNER_GRAPH = new URIImpl(catalogue.getServerURL()+"/planner");
+		SATISFIED_BY = new URIImpl(FGO.NS_FGO + "SatisfiedBy");
 	}
 
 	@Override
