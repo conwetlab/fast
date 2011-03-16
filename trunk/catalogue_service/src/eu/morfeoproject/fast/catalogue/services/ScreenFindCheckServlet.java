@@ -141,15 +141,13 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			//-----------------
 			
 			// ask the catalogue for suggestions, and add the results to the list of forms, operators and services
+			ArrayList<URI> results = new ArrayList<URI>();
 			if (search) {
 				int strategy = Constants.PREPOST + Constants.PATTERNS;
 				ArrayList<Screen> all = new ArrayList<Screen>();
 				all.addAll(screens);
 //				all.addAll(palette);
-				List<URI> results = getCatalogue().findScreens(all, selectedScreen, preconditions, postconditions, true, true, offset, limit, tags, strategy);
-				for (URI uri : results) { // add results of 'find' to the palette
-					palette.add(getCatalogue().getScreen(uri));
-				}
+				results.addAll(getCatalogue().findScreens(all, selectedScreen, preconditions, postconditions, true, true, offset, limit, tags, strategy));
 			}
 			
 			JSONObject output = new JSONObject();
@@ -194,7 +192,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 				
 				// check reachability of the screens in the palette
 				JSONArray paletteOut = new JSONArray();
-				for (Screen screen : palette) { //TODO finish it
+				for (Screen screen : palette) {
 					JSONObject jsonScreen = new JSONObject();
 					jsonScreen.put("uri", screen.getUri());
 					JSONArray preArray = new JSONArray();
@@ -211,6 +209,27 @@ public class ScreenFindCheckServlet extends GenericServlet {
 					paletteOut.put(jsonScreen);
 				}
 				output.put("palette", paletteOut);
+				
+				// check reachability of the results, and adds them to the response
+				JSONArray resultsOut = new JSONArray();
+				for (URI result : results) {
+					Screen screen = getCatalogue().getScreen(result);
+					JSONObject jsonScreen = new JSONObject();
+					jsonScreen.put("uri", screen.getUri());
+					JSONArray preArray = new JSONArray();
+					boolean reachability = true, satisfied = false;
+					for (Condition condition : screen.getPreconditions()) {
+						satisfied = getCatalogue().isConditionSatisfied(preconditions, reachables, condition, true, true, screen.getUri());
+						reachability = reachability & satisfied;
+						JSONObject jsonPre = condition.toJSON();
+						jsonPre.put("satisfied", satisfied);
+						preArray.put(jsonPre);
+					}
+					jsonScreen.put("preconditions", preArray);
+					jsonScreen.put("reachability", reachability);
+					resultsOut.put(jsonScreen);
+				}
+				output.put("results", resultsOut);
 				
 				writer.print(output.toString(2));
 				response.setContentType(MediaType.APPLICATION_JSON);
