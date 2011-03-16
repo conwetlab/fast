@@ -1095,6 +1095,7 @@ public class Catalogue {
 			sf.setCreationDate(new Date());
 		// persists the screen-flow
 		saveScreenFlow(sf);
+		// updates recommender
 		screenRecommender.rebuild(); //FIXME do not rebuild every time a new screen-flow is added!
 		if (log.isInfoEnabled()) log.info("Screenflow " + sfUri + " added.");
 	}
@@ -1124,6 +1125,7 @@ public class Catalogue {
 		removeScreenFlow(screenflow.getUri());
 		// save new content with the same URI
 		saveScreenFlow(screenflow);
+		// updates recommender
 		screenRecommender.rebuild(); //FIXME do not rebuild every time a new screen-flow is updated!
 		if (log.isInfoEnabled()) log.info("Screen-flow " + screenflow.getUri() + " updated.");
 	}
@@ -1172,6 +1174,7 @@ public class Catalogue {
 		saveScreen(screen);
 		// create plans for the screen
 		if (screenPlanner != null) screenPlanner.add(screen);
+		// updates recommender
 		scRecommender.rebuild(); //FIXME do not rebuild every time a new screen is added!
 	}
 
