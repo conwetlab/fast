@@ -71,10 +71,9 @@ public abstract class BuildingBlockRecommender implements Recommender {
 			long weight = pair.getSecond();
 			for (String element : pair.getFirst()) {
 				URI uri = new URIImpl(element);
-				if (!uriList.contains(uri)) {
+				if (!uriList.contains(uri) && !resultList.contains(uri)) {
 					resultList.add(uri);
-					if (log.isInfoEnabled())
-						log.info(uri + ", weight: " + weight);
+					if (log.isInfoEnabled()) log.info(uri + ", weight: " + weight);
 				}
 			}
 		}
@@ -82,7 +81,6 @@ public abstract class BuildingBlockRecommender implements Recommender {
 	}
 
 	private TopKStringPatterns getTopKStringPatterns(List<URI> uriList) {
-//		return this.fpgrowth.getTopKFrequentPatterns(uriToFeature(uri));
 		int maxHeapSize = Integer.valueOf(params.get("maxHeapSize", "50"));
 		TopKStringPatterns pattern = new TopKStringPatterns();
 		TopKStringPatterns partial;
