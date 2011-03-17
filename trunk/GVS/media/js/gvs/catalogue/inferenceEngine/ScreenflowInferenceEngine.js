@@ -118,8 +118,8 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
      */
     _findCheckOnSuccess: function(/**XMLHttpRequest*/ transport){
         var result = JSON.parse(transport.responseText);
-        if (result.palette) {
-            var paletteElements = result.palette;
+        if (result.results) {
+            var paletteElements = result.results;
         } else {
             var paletteElements = [];
         }
@@ -127,13 +127,21 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
         var allElements = paletteElements.clone();
 
         result.canvas.screens.each(function(bb) {
-            found = allElements.detect(function(element) {
+            var found = allElements.detect(function(element) {
                 return (element.uri == bb.uri);
             });
             if (!found) {
                 allElements.push(bb);
             }
-        }, this);
+        });
+        result.palette.each(function(el) {
+            var found = allElements.detect(function(element) {
+                return (element.uri == el.uri);
+            });
+            if (!found) {
+                allElements.push(el);
+            }
+        });
 
 
         this.mine._updateReachability(allElements);

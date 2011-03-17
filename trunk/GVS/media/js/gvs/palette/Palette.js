@@ -168,8 +168,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
             }
 
             // Emptying the current components
-            if (this._components.values().size() < descs.size() &&
-                ! GVS.getUser().getCatalogueMagic()) {
+            if (this._components.values().size() < descs.size()) {
                 Utils.showMessage("Building blocks loaded", {'hide': true});
             }
             this._components = new Hash();
