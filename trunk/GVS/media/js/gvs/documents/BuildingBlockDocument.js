@@ -1250,7 +1250,7 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
                 true
             ));
         this._addToolbarElement('debugger', new ToolbarButton(
-                'Debugger the current building block code',
+                'Debug the current Building Block',
                 'debugger',
                 function() {
                     this._pendingOperation = function() {
