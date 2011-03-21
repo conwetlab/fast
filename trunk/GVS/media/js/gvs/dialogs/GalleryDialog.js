@@ -60,6 +60,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
         this._properties.set('onDblClick', (properties.onDblClick || function(){}));
         // Disable all the events if the selected row is not valid
         this._properties.set('disableIfNotValid', (properties.disableIfNotValid || false));
+        this._properties.set('showAll', (properties.showAll && true));
 
         /**
          * Table fields
@@ -257,7 +258,9 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
 
         this._setContent(content);
         this._contentNode.appendChild(this._createSearchBar());
-        this._contentNode.appendChild(this._createLoadAll());
+        if (this._properties.get("showAll")) {
+            this._contentNode.appendChild(this._createLoadAll());
+        }
     },
 
     /**

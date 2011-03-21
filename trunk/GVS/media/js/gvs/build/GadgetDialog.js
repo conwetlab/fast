@@ -31,7 +31,8 @@ var GadgetDialog = Class.create(GalleryDialog, /** @lends Builder.prototype */ {
      */
     initialize: function($super, /** ScreenflowDescription */ description) {
         $super("Available gadgets for the screenflow", {
-            "onDblClick": this._showDeploymentInfo.bind(this)
+            "onDblClick": this._showDeploymentInfo.bind(this),
+            "showAll": false
         });
 
         /**

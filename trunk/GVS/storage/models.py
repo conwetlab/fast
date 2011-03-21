@@ -44,18 +44,23 @@ class Storage(models.Model):
     creationDate = models.DateTimeField(auto_now=True)
 
     def delete(self, *args, **kwargs):
-        json = simplejson.loads(self.data)
-        if json['gadgetResource'] != None:
-            conn = Connection(json['gadgetResource'])
-            result = conn.request_delete(resource='', headers={'Accept':'application/json'})
-            if not isValidResponse(result):
-                raise Exception(result['body'])
+        try:
+            json = simplejson.loads(self.data)
+
+            if json['gadgetResource'] != None:
+                conn = Connection(json['gadgetResource'])
+                result = conn.request_delete(resource='', headers={'Accept':'application/json'})
+                if not isValidResponse(result):
+                    raise Exception(result['body'])
+        except Exception, e:
+            pass
 
         gadget_relative_path = str(self.pk)
         gadget_path = path.join(STORAGE_DIR, gadget_relative_path)
         if path.isdir(gadget_path):
             shutil.rmtree(gadget_path)
-        super(Storage, self).delete(*args, **kwargs)
+        if self.id != None:
+            super(Storage, self).delete(*args, **kwargs)
 
     class Meta:
         unique_together = ('name', 'owner', 'version')

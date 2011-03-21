@@ -66,7 +66,7 @@ class GadgetStorage(resource.Resource):
         except Http404:
             return HttpResponse(json_encode([]), mimetype='application/json; charset=UTF-8')
         except Exception, e:
-            return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
+            return HttpResponseServerError(unicode(e), mimetype='text/plain; charset=UTF-8')
 
 
     @transaction.commit_on_success
