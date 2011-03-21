@@ -60,7 +60,7 @@ var iServeDialog = Class.create(ConfirmDialog /** @lends iServeDialog.prototype 
 
         var p1 = new Element("p").update(
             'This services are extracted from ' +
-            '<a href="http://iserve.kmi.open.ac.uk/">iServe</a>, ' +
+            '<a href="http://iserve.kmi.open.ac.uk/" target="_blank">iServe</a>, ' +
             'which is a platform to discover services through their semantic ' +
             'information.<br /> All of them are related to the building block you ' +
             'are creating, so hopefully some of them will be useful for you.'

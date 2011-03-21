@@ -1378,6 +1378,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _showiServe: function(iServeList) {
+        Utils.hideMessage();
         var dialog = new iServeDialog(iServeList);
         dialog.show();
     }
