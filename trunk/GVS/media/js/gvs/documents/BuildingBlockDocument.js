@@ -759,6 +759,7 @@ JSONEditor.prototype = {
         });
     },
     save: function() {
+        Utils.hideMessage();
         if (!this._onSave) return;
 
         var object,
@@ -767,7 +768,7 @@ JSONEditor.prototype = {
         try {
           object = JSON.parse(text);
         } catch (e) {
-          Utils.showErrorMessage("The properties are not well formed. It will not work");
+          Utils.showErrorMessage("Cannot save. The JSON is not well formed");
         }
         if (object) {
           this._onRepaint = false;
@@ -985,6 +986,15 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
     initialize: function ($super,/** Object */ properties) {
         $super("Building Block", properties, new DumbInferenceEngine());
         this._start();
+        var changeViewButton = new Element("span", {
+            "className": "toolbarIcon changeviewIcon",
+            "style": "position:absolute; top: 1px; right: 15px; cursor: pointer;",
+        }).update("&nbsp;");
+        changeViewButton.observe("click", function () {
+                this._propsView.changeView();
+            }.bind(this));
+        this._propsView.area.getNode().appendChild(changeViewButton);
+
     },
 
     /**
@@ -1268,14 +1278,14 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
                 }.bind(this),
                 false
             ));
-        this._addToolbarElement('properties', new ToolbarButton(
+        /*this._addToolbarElement('properties', new ToolbarButton(
                 'Edit Building Block properties',
                 'changeview',
                 function() {
                     this._propsView.changeView();
                 }.bind(this),
                 true
-            ));
+            ));*/
     },
     _findCheckCallback: function() {
         // Do nothing
