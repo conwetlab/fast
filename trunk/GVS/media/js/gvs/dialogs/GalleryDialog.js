@@ -60,7 +60,8 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
         this._properties.set('onDblClick', (properties.onDblClick || function(){}));
         // Disable all the events if the selected row is not valid
         this._properties.set('disableIfNotValid', (properties.disableIfNotValid || false));
-        this._properties.set('showAll', (properties.showAll && true));
+        this._properties.set('showAll', (properties.showAll !== undefined ?
+        properties.showAll : true));
 
         /**
          * Table fields
