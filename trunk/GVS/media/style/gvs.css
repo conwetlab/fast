@@ -548,6 +548,7 @@ h4{
     clear: both;
     cursor: move;
     position: relative;
+    z-index: 2;
 }
 .view.disabled {
     opacity:0.4;
