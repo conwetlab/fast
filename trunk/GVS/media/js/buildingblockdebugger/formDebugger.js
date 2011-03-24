@@ -43,6 +43,8 @@ BuildingBlockDebugger = (function() {
         }), '*');
     }, false);
 
+    Cookie.init({"name": "GVSDebugger", "expires": 10000});
+
     function getUrlCode() {
         var regex = new RegExp("[\\?&]url=([^&#]*)");
         var results = regex.exec(window.location.href);
@@ -145,7 +147,8 @@ BuildingBlockDebugger = (function() {
         setParams: setParams,
         addObserver: addObserver,
         getActionList: getActionList,
-        execAction: execAction
+        execAction: execAction,
+        getUrlCode: getUrlCode
     };
 })();
 
@@ -185,15 +188,11 @@ dojo.addOnLoad(function() {
                 var error = false;
                 var args = argumentNames.map(function(argName) {
                     var nameSpace = '_' + actionName + '_' + argName,
-                        uri_id = 'uri' + nameSpace,
                         data_id = 'data' + nameSpace,
-                        uri = $(uri_id).value.escapeHTML(),
+                        cookie_id = BuildingBlockDebugger.getUrlCode() + nameSpace;
                         data = $(data_id).value;
-                    if (! uri || uri.trim().empty()) {
-                        logger.warn('Url of argument ' +
-                            actionName + '#' + argName +
-                            ' is empty.');
-                    }
+
+                    Cookie.setData(cookie_id, data);
                     try {
                         data = data.evalJSON();
                     } catch(ex) {
@@ -202,7 +201,7 @@ dojo.addOnLoad(function() {
                             ' is not JSON valid.');
                         error = true;
                     }
-                    return { uri: uri, data: data };
+                    return { data: data };
                 });
                 if (!error) {
                   BuildingBlockDebugger.execAction(actionName, args);
@@ -217,22 +216,19 @@ dojo.addOnLoad(function() {
             ,
                 argumentNames.reduce(function(element, argumentName) {
                     var name_space = '_' + actionName + '_' + argumentName,
-                        uri_id = 'uri' + name_space,
-                        data_id = 'data' + name_space;
+                        data_id = 'data' + name_space,
+                        cookie_id = BuildingBlockDebugger.getUrlCode() + name_space;
+
+                    var initialValue = Cookie.getData(cookie_id) || "{\n\  \n}";
+
                     return element.insert(Element('p')
                         .insert(Element('strong', {'class': 'name'})
                         .insert(argumentName))
                         .insert(Element('br'))
-                        .insert(new dijit.form.TextBox({
-                            id: uri_id,
-                            placeHolder: 'Url',
-                            style: { width: '100%' }
-                        }).domNode)
-                        .insert(Element('br'))
                         .insert(new dijit.form.Textarea({
                             id: data_id,
                             placeHolder: 'Parameters',
-                            value: "{\n\  \n}",
+                            value: initialValue,
                             style: { width: '100%' }
                         }).domNode) );
                 }, Element('div', {'class': 'arguments'}))

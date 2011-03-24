@@ -59,7 +59,8 @@ document.observe('dom:loaded', function() {
             for (n in prototype) {
                 if (n != 'constructor' &&
                     n != 'initialize' &&
-                    n != 'manageData') {
+                    n != 'manageData' &&
+                    n[0] != '_') {
                     actions.push({
                         name: n,
                         arguments: prototype[n].argumentNames()
