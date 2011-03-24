@@ -1,0 +1,105 @@
+<html>
+<head>
+<style type="text/css">
+  h2.screen_title {
+    color: #FEBF43;
+    text-align: center;
+  }
+  .main {
+    width: 90%;
+    margin: 0px auto;
+    text-align: center;
+  }
+  .loadingImg {
+    margin-top: 100px;
+  }
+  .element {
+    float: left;
+    margin: 5px;
+    border: 2px solid #FEBF43;
+    -moz-border-radius: 13px;
+    -webkit-border-radius: 13px;
+    width: 125px;
+    padding: 5px;
+    height: 125px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .element.selected {
+    background-color: #FCF1D4;
+  }
+  .element .title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3px;
+    color: #FEBF43;
+    text-align: center;
+    overflow: hidden;
+    height: 18px;
+  }
+  .element img {
+    max-width: 115px;
+    max-height: 95px;
+    cursor: pointer;   
+  }
+</style>
+<script type="text/javascript">
+var {{buildingblockId}} = Class.create(BuildingBlock, {
+  init: function () {
+    this._list = null;
+    this._loadingImg = new Element('img', {
+                            'src': "http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif",
+                            'class': 'loadingImg'
+                        });
+    
+    $("{{screenId}}_body").update(this._loadingImg);
+  },
+  loadImages: function(list) {
+    $("{{screenId}}_body").update("");
+    if (list.data) {
+      $A(list.data).each(this._createImage, this);
+    } else {
+      $("{{screenId}}_body").update("Error, no valid data found");
+    }
+  },
+  
+  // Private methods
+  _createImage: function(element) {
+    if (element.image) {
+      var node = new Element("div", {"class": "element"});
+      
+      var image = new Element("img", {
+        "src": element.image,
+        "alt": element.title || "Element",
+        "title": element.title || ""
+      });
+      node.observe("click", function(e) {
+        var fact = {
+          "id": "item",
+          "data": element
+        };
+        this.manageData(null, [fact], []);
+        $A($("{{screenId}}_body").childNodes).each(function(el) {
+          el.removeClassName("selected");
+        });
+        node.addClassName("selected");
+      }.bind(this));
+      
+      node.appendChild(image);
+      var title = new Element("div", {"class": "title"}).update(element.title);
+      node.appendChild(title);
+      $("{{screenId}}_body").appendChild(node);
+    }
+  }
+});
+</script>
+</head>
+<body>
+  <h2 class="screen_title">Image browser</h2>
+  <div id="{{screenId}}_body" class="main">
+  </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "label": {
+    "en-gb": "PictureView"
+  },
+  "version": "20110323-1455",
+  "tags": [],
+  "creator": "jlopez",
+  "description": {
+    "en-gb": "Please fill the description..."
+  },
+  "rights": "http://creativecommons.org/",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/icon.png",
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshot.png",
+  "homepage": "http://fast.morfeo-project.eu/",
+  "triggers": [],
+  "libraries": [],
+  "parameterTemplate": "",
+  "actions": [
+    {
+      "uses": [],
+      "name": "loadImages",
+      "preconditions": [
+        {
+          "pattern": "?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/ElementList",
+          "label": {
+            "en-gb": "Generic Element List"
+          },
+          "id": "list"
+        }
+      ]
+    },
+    {
+      "uses": [],
+      "name": "init",
+      "preconditions": []
+    }
+  ],
+  "postconditions": [
+    {
+      "pattern": "?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/GenericElement",
+      "label": {
+        "en-gb": "Generic Element"
+      },
+      "id": "item"
+    }
+  ]
+}
