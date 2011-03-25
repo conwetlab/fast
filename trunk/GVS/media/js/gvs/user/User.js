@@ -177,7 +177,7 @@ var User = Class.create( /** @lends User.prototype */ {
         this.setCatalogueMagic((userData.catalogueMagic !== undefined));
         this.setiServe((userData.iServe !== undefined));
 
-        this._ezWebURL = userData.ezWebURL;
+        this._ezWebURL = userData.ezWebURL || "";
 
         if (this._ezWebURL != "" && this._ezWebURL[this._ezWebURL.length-1] != '/') {
             this._ezWebURL += '/';
