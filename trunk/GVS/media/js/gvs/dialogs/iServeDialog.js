@@ -94,18 +94,26 @@ var iServeDialog = Class.create(ConfirmDialog /** @lends iServeDialog.prototype 
             var row = new Element("tr");
             table.appendChild(row);
 
-            var name = service.label || "-";
+            var name = service.label || service.address;
             var serviceName = new Element("td").update(name);
             row.appendChild(serviceName);
 
-            var url = new Element("td").update(service.address);
+            var link = new Element('a', {
+                "href":"javascript:"
+            }).update("Wrap service");
+            link.observe("click", function() {
+                this._dialog.hide();
+                var url = URIs.wrapperService + "?service_url=" + service.address;
+                GVS.getDocumentController().openExternalTool("Wrap a service", url);
+            }.bind(this));
+            var url = new Element("td").update(link);
             row.appendChild(url);
 
             var moreinfo = new Element("td").update(
                 '<a target="_blank" style="text-decoration:none" href="' + service.service + '">+</a>'
             );
             row.appendChild(moreinfo);
-        });
+        }.bind(this));
 
         this._setContent(content);
     }
