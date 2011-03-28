@@ -1,0 +1,60 @@
+GVS Quick Setup Guide auf fast.morfeo-project.org +
+
+Eclipse Galileo Java EE installieren.
+JDK installieren (JDK 6 Update 18).
+JDKPfad in den Umgebungsvariablen (Benutzervariablen) als JAVA_HOME setzen.
+JRE auf die des JDKs stellen (jdk1.6.0_18)
+
+Tomcat installieren
+- Tomcat 6.0.20!!    (msvcr71.dll von \Java\jdk1.6.0_18\jre\bin\new_plugin nach Tomcat/bin kopieren)
+	+ im Monitor unter JavaOptions adden:
+		"-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true"
+
+Projekte auschecken:
+- GVS
+
+- GVS_data
+
+- CatalogueService  	
+	+ richtige jre und tomcat version im BuildPath einstellen
+	+ unter projekt-properties richtige target runtime einstellen
+	+ build.xml und repository.propertiers anpassen wie im quick setup guide beschrieben:
+		am einfachsten local repository und ".\\webapps\\repository"
+	+ build.xml mit ant ausführen
+	+ generierte war-file aus dem dist-ordner im tomcat deployen "localhost:8080 -> tomcat manager"
+
+Catalogue testen:
+http://localhost:8080/FASTCatalogue-1/ im browser öffnen
+
+Screens oder Operator sollten "No data found" liefern.
+
+
+Funktioniert? Wenn ja:
+___________________________
+
+Python installieren (Python 2.6.4)
+- Python-pfad in den Umgebungsvariablen vor PATH einfügen: "Pfad;"
+
+Django 1.0 installieren:
+- django entpacken
+- eingabeaufforderung öffnen
+- in den django-ordner navigieren
+- "python setup.py install"ausführen - fertig
+
+SQLite 3 "installieren"
+- entpacken, starten und datenbank-datei z.b. unter "..\fast.db" speichern (.help hilft!!)
+
+GVS Projekt:
+- settings.py auf sqlite3 anpassen:
+	nurnoch pfad zur datenbank angeben, rest leer ( = '') machen (man braucht keinen user, pwd, host und port mehr)
+- Catalgue-Url und Service-Wrapper-Url anpassen
+(nicht so wichtig - als EZwebserver z.B. "http://shaun/" angeben)
+
+Eingabeaufforderung öffnen:
+- in den GVS-Projektordner navigieren
+- "python manage.py syncdb" (falls gefragt wird: KEINEN superuser anlegen)
+- "python manage.py reshare_bbs" ausführen, damit der Catalogue seine Daten bekommt
+- "python manage.py runserver localhost:13337" ausführen.
+
+Webbrowser öffnen:
+- auf "localhost:13337" besuchen und mit admin, admin spass haben :)

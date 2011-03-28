@@ -25,6 +25,9 @@ package fast.servicescreen.client;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.http.client.UrlBuilder;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -54,6 +57,8 @@ import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 import fujaba.web.runtime.client.FAction;
+import fujaba.web.runtime.client.FHashMap;
+import fujaba.web.runtime.client.FHashSet;
 import fujaba.web.runtime.client.FTest;
 import fujaba.web.runtime.client.ICObject;
 
@@ -98,6 +103,26 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       FTest.init(false);
       FTest.assertTrue(true, "entry point has been reached");
 
+      param = Window.Location.getParameter("service_url");
+      if (param != null)
+      {
+          FTest.assertTrue(true, "got param: " + param);
+          
+          // try to analyse it
+          int pos = param.indexOf('?');
+          String paramPart = param.substring(pos+1, param.length());
+          paramSplits = paramPart.split("&");
+          paramMap = new FHashMap<String, String>();
+          for (String paramElem : paramSplits) 
+          {
+        	  String[] nameValue = paramElem.split("=");
+        	  if (nameValue.length == 2)
+        	  {
+        		  paramMap.put(nameValue[0], nameValue[1]);
+        	  }
+          }
+      }
+     
       // build action graph
       initFActions();
       
@@ -208,7 +233,51 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
         	 designer.addToScreens(serviceScreen);
          }
          
+          
+         // in case of a service param, prefill a wrapper
+         if (param != null)
+         {
+        	 // create or find the corresponding screen
+        	 String screenName = "recommendedScreen";
+        	 if (paramMap != null)
+        	 {
+        		 screenName = paramMap.get("method");       		 
+        	 }
+        	 
+        	 ServiceScreen recommendedScreen = null;
+        	 for (ServiceScreen oldScreen : designer.getScreens()) 
+        	 {
+				if (oldScreen.getName().equals(screenName))
+				{
+					recommendedScreen = oldScreen;
+					break;
+				}
+        	 }
+        	 if (recommendedScreen == null)
+        	 {
+        		 recommendedScreen = new ServiceScreen();
+        		 recommendedScreen.setName(screenName);
+        		 designer.addToScreens(recommendedScreen);
+        	 }
+        	 recommendedScreen.setRequestTemplate(param);
+    		 
+        	 
+        	 // make the recommended screen the selected one
+        	 serviceScreen = recommendedScreen;
+         }
+         
          buildGUI();
+         
+         if (param != null)
+         {
+        	 // open request tab
+        	 tabPanel.selectTab(2);
+         }
+         
+//         if (templateText == null || "".equals(templateText))
+//           {
+//              templateBox.setValue(URL_Settings.getTemplateBox_ExampleURL());
+//           }
          
          // in case of testing 
          if (getToSuccess() != null)
@@ -228,26 +297,26 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
 //         System.out.println("now ready to start testing ...");
          
          // fill potentially empty fields
-         String value = nameTextBox.getValue();
-         if (value == null || "".equals(value))
-         {
-            nameTextBox.setValue("Ebay Wrapper");
-         }
-         
-         if (serviceScreen.sizeOfPreconditions() == 0)
-         {
-            FactPort factPort = new FactPort();
-            factPort.setName("query_keywords");
-            factPort.setExampleValue("Notebook");
-            serviceScreen.addToPreconditions(factPort);
-         }
-         
-         String templateText = templateBox.getValue();
-         if (templateText == null || "".equals(templateText))
-         {
-            templateBox.setValue(URL_Settings.getTemplateBox_ExampleURL());
-         }
-         
+//         String value = nameTextBox.getValue();
+//         if (value == null || "".equals(value))
+//         {
+//            nameTextBox.setValue("Ebay Wrapper");
+//         }
+//         
+//         if (serviceScreen.sizeOfPreconditions() == 0)
+//         {
+//            FactPort factPort = new FactPort();
+//            factPort.setName("query_keywords");
+//            factPort.setExampleValue("Notebook");
+//            serviceScreen.addToPreconditions(factPort);
+//         }
+//         
+//         String templateText = templateBox.getValue();
+//         if (templateText == null || "".equals(templateText))
+//         {
+//            templateBox.setValue(URL_Settings.getTemplateBox_ExampleURL());
+//         }
+//         
 
          // xmldoc should still be null        
 //         FTest.assertTrue(requestHandler.xmlDoc == null, "xmldoc should be null is: " + requestHandler.xmlDoc);
@@ -436,6 +505,9 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
     * */
    RuleGUI ruleGUI_tmp = null;
    MediationRuleGUI mediationGUI_tmp = null;
+private String param;
+private String[] paramSplits;
+private FHashMap<String, String> paramMap;
    protected void setRuleGUI(RuleGUI ruleGUI)
    {
 	   if(ruleGUI != null && this.ruleGUI != ruleGUI)

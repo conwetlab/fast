@@ -111,7 +111,7 @@ public class FactEditor implements PropertyChangeClient
 
    // create attributes for all objects in all states of this statechart
    private CoobraServiceAsync coobraService;
-   private CoobraRoot coobraRoot;
+   private CoobraRoot coobraRoot; 
    private RequestService fixMe;
    private Object _TmpObject;
    private FactTypeTree factTypeTree;
