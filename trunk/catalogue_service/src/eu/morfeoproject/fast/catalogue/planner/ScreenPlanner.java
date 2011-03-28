@@ -71,11 +71,10 @@ public class ScreenPlanner {
 	}
 	
 	protected List<Plan> reverse(List<Plan> planList) {
-		LinkedList<Plan> reverseList = new LinkedList<Plan>();
 		for (Plan plan : planList) {
 			Collections.reverse(plan.getUriList());
 		}
-		return reverseList;
+		return planList;
 	}
 	
 	protected List<Plan> removeDuplicates(List<Plan> planList, List<URI> uriList) {
