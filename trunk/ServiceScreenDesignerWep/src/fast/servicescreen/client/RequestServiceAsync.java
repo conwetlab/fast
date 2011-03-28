@@ -35,5 +35,9 @@ public interface RequestServiceAsync
 	
 	void sendHttpRequest_POST(String url, HashMap<String, String> headers, String body, AsyncCallback<String> callback);
 	
+	void sendHttpRequest_PUT(String url, HashMap<String, String> headers, String body, AsyncCallback<String> callback);
+	
+	void sendHttpRequest_DELETE(String url, HashMap<String, String> headers, String body, AsyncCallback<String> callback);
+	
 	void saveJsFileOnServer(boolean isLocal, String opName, String preHTMLCode, String transCode, String postHTMLCode, AsyncCallback<String> callback);
 }

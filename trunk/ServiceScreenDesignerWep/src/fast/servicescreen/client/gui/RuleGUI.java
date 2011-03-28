@@ -320,9 +320,16 @@ public class RuleGUI
       {
          for (Iterator typeIter = serviceDesigner.iteratorOfFactTypes(); typeIter.hasNext();)
          {
-            FactType factType = (FactType) typeIter.next();
-            String typeName = factType.getTypeName();
-			types.add(typeName);
+        	 FactType type = (FactType) typeIter.next();
+        	 String typeName = type.getUri();
+        	 //format type name: (e.g. name - http://fast.amazon.com/domain/name)
+        	 typeName = typeName.substring(typeName.lastIndexOf("/") + 1) + " - " + type.getUri();
+        	 //add to oracle words
+        	 //System.out.println("Add type to oracle: " + typeName);
+        	 if (typeName != null) 
+        	 {
+        		 types.add(typeName);
+        	 }
          }
       }
       else if ("fillAttributes".equals(kind))
@@ -330,6 +337,7 @@ public class RuleGUI
          // retrieve type of parent rule and add its attributes to the oracle
          FASTMappingRule parent = nextRule.getParent();
          String typeName = parent.getTargetElemName();
+         typeName = typeName.substring(typeName.indexOf("http"));
          FactType factType = findFactType(typeName);
          
          if(factType != null)
@@ -401,7 +409,9 @@ public class RuleGUI
       for (Iterator iter = ((ServiceDesigner) buildingBlock.get("serviceDesigner")).iteratorOfFactTypes(); iter.hasNext();)
       {
          factType = (FactType) iter.next();
-         if (factType.getTypeName().equals(typeName))
+         String factTypeName = factType.getUri();
+         if ((factTypeName != null && factTypeName.equals(typeName)) 
+        		 || (factTypeName == null && typeName == null) )
          {
             return factType;
          }

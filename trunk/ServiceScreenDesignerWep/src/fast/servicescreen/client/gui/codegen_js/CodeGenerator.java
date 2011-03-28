@@ -30,6 +30,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
@@ -587,51 +588,52 @@ public class CodeGenerator
 		
 		//shareBuildingBlock():
 		//url and header
-//		String url = /*"http://127.0.0.1:13337/"*/ URL_Settings.getGVS_URL() + "buildingblock/resource";
-//		final String cookie = "fastgvsid=" + Cookies.getCookie("fastgvsid");
-//		final HashMap<String, String> headers = new HashMap<String, String>();
-//		headers.put("Cookie", cookie);
-//
-//		//build operator
-//		String body = "buildingblock=" + createBuildingBlock();
-//		
-//		//upload to GVS
-//		service.sendHttpRequest_POST(url, headers, body, new AsyncCallback<String>(){
-//			@Override
-//			public void onFailure(Throwable caught) {}
-//
-//			@Override
-//			public void onSuccess(String result) {
-//				if(result != null && result != "-1")
-//				{
-//					JSONValue resourceVal = JSONParser.parse(result);
-//					JSONObject resourceObj = resourceVal.isObject();
-//					JSONValue idVal = resourceObj.get("id");
-//					JSONNumber idNum = idVal.isNumber();
-//					String id = idNum.toString();
-//
-//					if(id != null)
-//					{
-//						String shareUrl = "http://127.0.0.1:13337/" + "buildingblock/" + id + "/sharing";
-//						service.sendHttpRequest_POST(shareUrl, headers, "", new AsyncCallback<String>(){
-//							@Override
-//							public void onFailure(Throwable caught)
-//							{
-//								//Resource couldn't be shared
-//								System.out.println("Resource couldn't be shared" + caught.getMessage());
-//							}
-//
-//							@Override
-//							public void onSuccess(String result)
-//							{
-//								//Resource was shared
-//								System.out.println("Resource was shared: " + result);
-//							}
-//						});
-//					}
-//				}
-//			}
-//		});
+		String url = "http://localhost:13337/" /*URL_Settings.getGVS_URL()*/ + "buildingblock/resource";
+		final String cookie = "fastgvsid=" + Cookies.getCookie("fastgvsid");
+		final HashMap<String, String> headers = new HashMap<String, String>();
+		headers.put("Cookie", cookie);
+
+		//build operator
+		String jsonObject = createBuildingBlock();
+		String body = "buildingblock=" + jsonObject;
+		
+		//upload to GVS
+		service.sendHttpRequest_POST(url, headers, body, new AsyncCallback<String>(){
+			@Override
+			public void onFailure(Throwable caught) {}
+
+			@Override
+			public void onSuccess(String result) {
+				if(result != null && result != "-1" && result.startsWith("{"))
+				{
+					JSONValue resourceVal = JSONParser.parse(result);
+					JSONObject resourceObj = resourceVal.isObject();
+					JSONValue idVal = resourceObj.get("id");
+					JSONNumber idNum = idVal.isNumber();
+					String id = idNum.toString();
+
+					if(id != null)
+					{
+						String shareUrl = "http://127.0.0.1:13337/" + "buildingblock/" + id + "/sharing";
+						service.sendHttpRequest_POST(shareUrl, headers, "", new AsyncCallback<String>(){
+							@Override
+							public void onFailure(Throwable caught)
+							{
+								//Resource couldn't be shared
+								System.out.println("Resource couldn't be shared" + caught.getMessage());
+							}
+
+							@Override
+							public void onSuccess(String result)
+							{
+								//Resource was shared
+								System.out.println("Resource was shared: " + result);
+							}
+						});
+					}
+				}
+			}
+		});
 	}
 	
 	/*
@@ -648,19 +650,22 @@ public class CodeGenerator
 		
 		buildingBlockString = buildingBlockString.replace("<<name>>", bbName);
 		//code
-		String bbCodeUrl = /*servicescreendesignerURL*/"" + bbName + "Op.js";
+		String bbCodeUrl = /*this.URL*/"http://localhost:8080/ServiceDesignerWep/servicescreendesignerwep/" + bbName + "Op.js";
 		buildingBlockString = buildingBlockString.replace("<<codeUrl>>", bbCodeUrl);
 		
 		//actionName
 		String bbActionName = "filter";
 		buildingBlockString = buildingBlockString.replace("<<actionName>>", bbActionName);
 		
-		//TODO tg preconditions
+		//tg preconditions
 		String bbPreconditions = "";
 		for (Iterator<FactPort> iterator = buildingBlock.iteratorOfPreconditions(); iterator.hasNext();) {
 			FactPort precondition = (FactPort) iterator.next();
-			FactType conditionType = retrieveFactType(precondition.getFactType());
-			bbPreconditions += createCondition(conditionType);
+			String factTypeUri = precondition.getFactType();
+			factTypeUri = factTypeUri.substring(factTypeUri.indexOf("http"));
+			FactType conditionType = retrieveFactType(factTypeUri);
+			if(conditionType != null)
+				bbPreconditions += createCondition(conditionType);
 			
 			if(iterator.hasNext())
 			{
@@ -669,12 +674,15 @@ public class CodeGenerator
 		}
 		buildingBlockString = buildingBlockString.replace("<<preconditions>>", bbPreconditions);
 		
-		//TODO tg postconditions
+		//tg postconditions
 		String bbPostconditions = "";
 		for (Iterator<FactPort> iterator = buildingBlock.iteratorOfPostconditions(); iterator.hasNext();) {
 			FactPort postcondition = (FactPort) iterator.next();
-			FactType conditionType = retrieveFactType(postcondition.getFactType());
-			bbPostconditions += createCondition(conditionType);
+			String factTypeUri = postcondition.getFactType();
+			factTypeUri = factTypeUri.substring(factTypeUri.indexOf("http"));
+			FactType conditionType = retrieveFactType(factTypeUri);
+			if(conditionType != null)
+				bbPostconditions += createCondition(conditionType);
 			
 			if(iterator.hasNext())
 			{
@@ -698,14 +706,14 @@ public class CodeGenerator
 		return buildingBlockString;
 	}
 	
-	private FactType retrieveFactType(String typeName)
+	private FactType retrieveFactType(String uri)
 	{
 		FactType result = new FactType();
 		ServiceDesigner designer = ((ServiceScreen)screen).getServiceDesigner();
 		for (Iterator<FactType> iterator = designer.iteratorOfFactTypes(); iterator.hasNext();) {
 			FactType factType = (FactType) iterator.next();
 			
-			if(typeName.equals(factType.getTypeName()))
+			if(uri.equals(factType.getUri()))
 			{
 				result = factType;
 				break;
@@ -722,35 +730,29 @@ public class CodeGenerator
 	{
 		String conditionString = conditionTemplate;
 		
-		//id
-		conditionString.replaceAll("<<conditionID>>", condition.getLabel().toLowerCase()); 
+		//id and label
+		if(condition.getLabel() != null)
+		{
+			conditionString = conditionString.replace("<<conditionID>>", condition.getLabel().toLowerCase());
+			conditionString = conditionString.replace("<<conditionLabel>>", condition.getLabel());
+		}
+		else
+		{
+			conditionString = conditionString.replace("<<conditionID>>", "");
+			conditionString = conditionString.replace("<<conditionLabel>>", "");
+		}
 		
-//		replaceId();
-//		replaceLabel();
-		conditionString.replaceAll("<<conditionLabel>>", condition.getLabel());
-		
-//		replacePattern();
-		String patternString = "?" + condition.getTypeName() +
-							   " http://www.w3.org/1999/02/22-rdf-syntax-ns#type " + condition.getUri();
-		conditionString.replaceAll("<<conditionPattern>>", patternString);
+		//pattern
+		if(condition.getTypeName() != null && condition.getUri() != null)
+		{
+			String patternString = "?" + condition.getTypeName() +
+			" http://www.w3.org/1999/02/22-rdf-syntax-ns#type " + condition.getUri();
+			conditionString = conditionString.replace("<<conditionPattern>>", patternString);
+		}
+		else
+			conditionString = conditionString.replace("<<conditionPattern>>", "");
 		
 		return conditionString;
-	}
-	
-	/*
-	 * replace all parameters to have a functional concept
-	 * */
-	public void createConcept()
-	{
-		String concept = conceptTemplate;
-		
-//		replaceDomain(concept);
-//		replaceName();
-//		replaceDescription();
-//		replaceLabel();
-//		replaceSubClassOf();
-//		replaceUri();
-//		replaceTags();
 	}
 	
 	// -------------- the template strings -------------- //
@@ -875,104 +877,105 @@ public class CodeGenerator
 	
 	public String buildingBlockTemplate =
 		//declare JSON object 
-		depth + "{\n" +
+		"{\n" +
 			//name
-		    depth2 + "\"name\" : \"<<name>>\"\n" +
+		    depth2 + "\"name\" : \"<<name>>\",\n" +
 		    
 			//url of the code
-			depth2 + "\"code\" : \"<<codeUrl>>\"\n" +
+			depth2 + "\"code\" : \"<<codeUrl>>\",\n" +
 			
 			//actions = {name, id, preconditions, uses}
-			depth2 + "\"actions\" : {\n" +
+			depth2 + "\"actions\" : [{\n" +
 			
 				//name of the action
-				depth3 + "\"name\" : \"<<actionName>>\"\n" +
+				depth3 + "\"name\" : \"<<actionName>>\",\n" +
 				
 				//preconditions = [{},{...}]
 				depth3 + "\"preconditions\" : [<<preconditions>>\n" +
 			
-			    depth3 + "]\n" +
+			    depth3 + "],\n" +
 				//action uses
 				depth3 + "\"uses\" : []\n" +
 			
-			depth2 + "}\n" +
+			depth2 + "}],\n" +
 			
 			//postconditions= [{},{...}]
 			depth2 + "\"postconditions\" : [<<postconditions>>\n" +
 			
-			depth2 + "]\n" +
+			depth2 + "],\n" +
+			
+			//
+			depth2 + "\"type\" : \"resource\",\n" +
 			
 			//version can be blank
-			depth2 + "\"version\" : \"\"\n" +
+			depth2 + "\"version\" : \"\",\n" +
 			
 			//label
-			depth2 + "\"label\" : { \"en\" : \"<<label>>\"}\n" +
+			depth2 + "\"label\" : { \"en\" : \"<<label>>\"},\n" +
 			
 			//description
-			depth2 + "\"description\" : \"<<description>>\"\n" +
+			depth2 + "\"description\" : { \"en\" : \"<<description>>\"},\n" +
 			
 			//external libs that the bb needs to work
-			depth2 + "\"libraries\" : [<<libraries>>]\n" +
+			depth2 + "\"libraries\" : [<<libraries>>],\n" +
 			
 			//triggers
-			depth2 + "\"triggers\" : []\n" +
+			depth2 + "\"triggers\" : [],\n" +
 			
 			//tags
-			depth2 + "\"tags\" : [<<tags>>]\n" +
+			depth2 + "\"tags\" : [<<tags>>],\n" +
 			
 			//default rights
-			depth2 + "\"rights\" : \"http://creativecommons.org/\"\n" +
+			depth2 + "\"rights\" : \"http://creativecommons.org/\",\n" +
 			
 			//default homepage
-			depth2 + "\"homepage\" : \"http://fast.morfeo-project.eu/\"\n" +
+			depth2 + "\"homepage\" : \"http://fast.morfeo-project.eu/\",\n" +
 			
 			//"default" icon
-			depth2 + "\"icon\" : \"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/<<name>>icon.jpg\"\n" +
+			depth2 + "\"icon\" : \"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/<<name>>icon.jpg\",\n" +
 			
 			//"default" screenshot
 			depth2 + "\"screenshot\" : \"http://www.deri.ie/<<name>>screenshot.jpg\"\n" +
-		depth + "}\n" +
-	"\n";
+	"}\n";
 	
 	public String conditionTemplate =
 	//a condition
-	depth + "{\n" +
+	depth2 + "{\n" +
 	
 		//condition id
-		depth2 + "\"id\" : \"<<conditionID>>\"\n" +
+		depth3 + "\"id\" : \"<<conditionID>>\",\n" +
 	
 		//condition label
-		depth2 + "\"label\" : \"<<conditionLabel>>\"\n" +
+		depth3 + "\"label\" : { \"en\" : \"<<conditionLabel>>\"},\n" +
 		
 		//condition pattern
-		depth2 + "\"pattern\" : \"<<conditionPattern>>\"\n" +
+		depth3 + "\"pattern\" : \"<<conditionPattern>>\",\n" +
 		
 		//condition positive default = true
-		depth2 + "\"positive\" : \"true\"\n" +
+		depth3 + "\"positive\" : \"true\"\n" +
 	
-	depth + "}\n";
+	depth2 + "}\n";
 	
 	public String conceptTemplate =
 		//declare JSON object 
-		depth + "{\n" +
+		"{\n" +
 			//domain
-	    	depth2 + "\"domain\" : \"<<domain>>\"\n" +
+	    	depth + "\"domain\" : \"<<domain>>\",\n" +
 	    	//name
-	    	depth2 + "\"name\" : \"<<name>>\"\n" +
-	    	//description
-	    	depth2 + "\"description\" : \"<<description>>\"\n" +
+	    	depth + "\"name\" : \"<<name>>\",\n" +
 	    	//label
-	    	depth2 + "\"label\" : \"<<label>>\"\n" +
-	    	//subClassOf
-	    	depth2 + "\"subClassOf\" : \"<<subClassOf>>\"\n" +
+	    	depth + "\"label\" : { \"en\" : \"<<label>>\"},\n" +
+	    	//description
+	    	depth + "\"description\" : { \"en\" : \"<<description>>\"},\n" +
 	    	//uri
-	    	depth2 + "\"uri\" : \"<<uri>>\"\n" +
+	    	depth + "\"uri\" : \"<<uri>>\",\n" +
 	    	//attributes
-	    	depth2 + "\"attributes\" : [<<attributes>>}\n" +
+	    	depth + "\"attributes\" : [<<attributes>>],\n" +
+	    	//subClassOf
+	    	depth + "<<subClassOf>>\n" +
 	    	//tags
-	    	depth2 + "\"tags\" : [<<tags>>]\n" +
-	    depth + "}\n" +
-	"\n";
+	    	depth + "\"tags\" : [<<tags>>]\n" +
+	    "}";
 	
 	public String helperMethods = "";
 }

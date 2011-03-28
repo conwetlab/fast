@@ -32,6 +32,8 @@ import java.util.Iterator;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -55,6 +57,8 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	// Saves the actual REST server response
 	private String responseBody = "";
 	private HttpGet httpget;
+	private HttpPut httpput;
+	private HttpDelete httpdelete;
 	private ResponseHandler<String> responseHandler;
 	
 	//the current path
@@ -202,8 +206,8 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			//if local save into war, if not save into webapps folder
 			if (isLocal)
 			{
-				prefixLength = classLocation.indexOf("ServiceScreenDesignerWep/war");
-				prefixLength += "ServiceScreenDesignerWep/war".length();
+				prefixLength = classLocation.indexOf("ServiceScreenDesignerWep");
+				prefixLength += "ServiceScreenDesignerWep".length();
 				path = classLocation.substring(0, prefixLength) + "/wrapper/";
 			}
 			else
@@ -259,5 +263,71 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		classpath = classpath.substring("file:".length());
 		
 		return classpath;
+	}
+	
+	@Override
+	public String sendHttpRequest_PUT(String url, HashMap<String, String> headers, String body)
+	{
+		//create client and method appending to url
+		DefaultHttpClient httpclient_PUT = new DefaultHttpClient();
+		httpput = new HttpPut(url);
+	    
+		  //add all headers
+		if(headers != null)
+		{
+			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
+				String tmpKey = (String) iterator.next();
+				String tmpVal = headers.get(tmpKey);
+				httpput.addHeader(tmpKey, tmpVal);
+			}
+		}
+		
+		// Create response handler
+		responseHandler = new BasicResponseHandler();
+		
+		try
+		{
+			// send the POST request
+			responseBody = httpclient_PUT.execute(httpput, responseHandler);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			responseBody = "-1";
+		}
+		return responseBody;
+	}
+	
+	@Override
+	public String sendHttpRequest_DELETE(String url, HashMap<String, String> headers, String body)
+	{
+		//create client and method appending to url
+		DefaultHttpClient httpclient_DELETE = new DefaultHttpClient();
+		httpdelete = new HttpDelete(url);
+	    
+		  //add all headers
+		if(headers != null)
+		{
+			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
+				String tmpKey = (String) iterator.next();
+				String tmpVal = headers.get(tmpKey);
+				httpdelete.addHeader(tmpKey, tmpVal);
+			}
+		}
+		
+		// Create response handler
+		responseHandler = new BasicResponseHandler();
+		
+		try
+		{
+			// send the POST request
+			responseBody = httpclient_DELETE.execute(httpdelete, responseHandler);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			responseBody = "-1";
+		}
+		return responseBody;
 	}
 }

@@ -140,7 +140,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 		   {
 			   FactType newType = (FactType) newValue;
 			   newType.addPropertyChangeListener(FactType.PROPERTY_TYPE_NAME, this);
-			   System.out.println("Added type name listener to new fact type");
+			   System.out.println("Added type name listener to new fact type: " + newType.getLabel());
 		   }
 	   }
    }
@@ -174,17 +174,14 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   for (Iterator<FactType> types = designer.iteratorOfFactTypes(); types.hasNext();) 
 	   {
 		   FactType type = (FactType) types.next();
-		   String typeName = type.getTypeName();
-		   //format type name: (e.g. Book - fast.amazon)
-		   // typeName = typeName.substring(typeName.lastIndexOf(".") + 1) + " - " +
-		   // typeName.subSequence(0, typeName.lastIndexOf("."));
+		   String typeName = type.getUri();
+		   //format type name: (e.g. name - http://fast.amazon.com/domain/name)
+		   typeName = typeName.substring(typeName.lastIndexOf("/") + 1) + " - " + type.getUri();
 		   //add to oracle words
 		   //System.out.println("Add type to oracle: " + typeName);
 		   if (typeName != null) 
 		   {
 			   words.add(typeName);
-			   //TODO tg no fake typeNames
-//			   words.add(typeName + "List");
 		   }
 	   }
 	   

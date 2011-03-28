@@ -75,7 +75,7 @@ public class ShareResourceHandler {
 
 			@Override
 			public void onSuccess(String result) {
-				if( result != null && result != "-1")
+				if(result != null && result != "-1")
 				{
 					JSONValue resourceVal = JSONParser.parse(result);
 					JSONObject resourceObj = resourceVal.isObject();
@@ -119,10 +119,15 @@ public class ShareResourceHandler {
 		String name = res.getName();
 		JSONString resName = new JSONString(name);
 		resource.put("name", resName);
+		
+		//label as seen in GVS
+		JSONObject resLabel = new JSONObject();
+		resLabel.put("en-gb", new JSONString(res.getName()));
+		resource.put("label", resLabel);
 
 		//code
 		String codeUrl = codeBaseUrl + res.getName() + "Op.js";
-		JSONString resCode = new JSONString(/*codeUrl*/"http://localhost:8080/ServiceDesignerWep/servicescreendesignerwep/TestWrapper2Op.js");
+		JSONString resCode = new JSONString(/*codeUrl*/"http://127.0.0.1:8080/ServiceDesignerWep/servicescreendesignerwep/F1DriversPerSeasonOp.js");
 		resource.put("code", resCode);
 
 		//version - left blank will let the gvs generate it
@@ -133,20 +138,20 @@ public class ShareResourceHandler {
 		JSONArray resActions = new JSONArray();
 		JSONObject actions1 = new JSONObject();
 		//actions.name
-		actions1.put("name", new JSONString(name + "Resource"));
+		actions1.put("name", new JSONString("search"));
 		//actions.preconditions [id,label,pattern,positive] TODO tg adjust
 		FactPort preCondition = (FactPort)res.iteratorOfPreconditions().next();
 		JSONArray preConds = new JSONArray();
 		JSONObject preCond1 = new JSONObject();
 		//actions.preconditions.id
-		preCond1.put("id", new JSONString(preCondition.getName().toLowerCase()));		
+		preCond1.put("id", new JSONString("filter"));		
 		//actions.preconditions.label
 		JSONObject preCond1Label = new JSONObject();
-		preCond1Label.put("en", new JSONString("A " + preCondition.getName().toLowerCase()));
+		preCond1Label.put("en-gb", new JSONString("A filter"));
 		preCond1.put("label", preCond1Label);
 		//actions.preconditions.pattern
 		//		String preCond1Pattern = "?" + preCondition.getName() + " " + preCondition.getUri() + " " + ;
-		String preCond1Pattern = "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request";
+		String preCond1Pattern = "?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:8080/Catalogue-1/concepts/kassel/f1season";
 		preCond1.put("pattern", new JSONString(preCond1Pattern));
 		//actions.preconditions.positive
 		preCond1.put("positive", new JSONString("true"));
@@ -193,21 +198,19 @@ public class ShareResourceHandler {
 		resActions.set(0, actions1);
 		resource.put("actions", resActions);
 
-
-
 		//postconditions: [id, label, pattern, positive] TODO tg adjust
 		FactPort postCondition = (FactPort)res.iteratorOfPostconditions().next();
 		JSONArray postConds = new JSONArray();
 		JSONArray innerPostConds = new JSONArray();
 		JSONObject postCond1 = new JSONObject();
 		//actions.preconditions.id
-		postCond1.put("id", new JSONString(postCondition.getName().toLowerCase()));		
+		postCond1.put("id", new JSONString("list"));		
 		//actions.preconditions.label
 		JSONObject postCond1Label = new JSONObject();
-		postCond1Label.put("en", new JSONString("A " + postCondition.getName()));
+		postCond1Label.put("en-gb", new JSONString("A driver list"));
 		postCond1.put("label", postCond1Label);
 		//actions.preconditions.pattern
-		String postCond1Pattern = "?L http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Response";
+		String postCond1Pattern = "?f1driverlist http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:8080/Catalogue-1/concepts/kassel/f1driverlist";
 		postCond1.put("pattern", new JSONString(postCond1Pattern));
 		//actions.preconditions.positive
 		postCond1.put("positive", new JSONString("true"));
@@ -250,19 +253,15 @@ public class ShareResourceHandler {
 		//		}
 		//		resource.put("postconditions", postConds);
 
-		//label TODO tg default label?
-		JSONObject resLabel = new JSONObject();
-		resLabel.put("en", new JSONString("A" + res.getName()));
-		resource.put("label", resLabel);
-
 		//description TODO tg
 		JSONObject resDescription = new JSONObject();
-		resDescription.put("en", new JSONString("A " + postCondition.getName()));
+		resDescription.put("en-gb", new JSONString("This is a " + res.getName()));
 		resource.put("description", resDescription);
 
-		//uri TODO tg catalogue/services/<id>
-		//		JSONString resUri = new JSONString("");
-		//		resource.put("uri", resUri);
+		//uri TODO tg unnecessary!
+//		JSONString resUri = new JSONString("http://localhost:8080/Catalogue-1/services/230");
+//		resource.put("uri", resUri);
+
 
 		//the external libs that the BB needs to work
 		JSONArray resLibs = new JSONArray();
