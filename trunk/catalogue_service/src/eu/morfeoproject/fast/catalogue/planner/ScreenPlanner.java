@@ -23,6 +23,7 @@
 package eu.morfeoproject.fast.catalogue.planner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,8 +66,26 @@ public class ScreenPlanner {
 		LinkedList<Plan> planList = new LinkedList<Plan>();
 		List<Plan> searchList = searchPlans(goal);
 		planList.addAll(rankList(searchList, uriList));
-		
-		return planList;
+
+		return reverse(removeDuplicates(planList, uriList));
+	}
+	
+	protected List<Plan> reverse(List<Plan> planList) {
+		LinkedList<Plan> reverseList = new LinkedList<Plan>();
+		for (Plan plan : planList) {
+			Collections.reverse(plan.getUriList());
+		}
+		return reverseList;
+	}
+	
+	protected List<Plan> removeDuplicates(List<Plan> planList, List<URI> uriList) {
+		LinkedList<Plan> newList = new LinkedList<Plan>();
+		for (Plan plan : planList) {
+			Plan p = new Plan();
+			p.setUriList(plan.getUriList(uriList));
+			newList.add(p);
+		}
+		return newList;
 	}
 
 	protected List<Plan> rankList(List<Plan> planList, List<URI> uriList) {
