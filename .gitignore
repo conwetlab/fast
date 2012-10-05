@@ -1,0 +1,1333 @@
+
+# /tags/catalogue20101116/catalogue_service/src/eu/morfeoproject/fast/catalogue/ontologies/
+/tags/catalogue20101116/catalogue_service/src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
+
+# /trunk/GVS/
+/trunk/GVS/.settings/*
+/trunk/GVS/.settings
+/trunk/GVS/.project
+/trunk/GVS/.pydevproject
+/trunk/GVS/static/*
+/trunk/GVS/media/logs/*
+/trunk/GVS/*.pyc
+/trunk/GVS/.cache
+
+# /trunk/GVS/.settings/
+/trunk/GVS/.settings/*
+
+# /trunk/GVS/media/js/doc/uml/
+/trunk/GVS/media/js/doc/uml/.QueryCache
+
+# /trunk/GVS/media/logs/
+/trunk/GVS/media/logs/access.log
+/trunk/GVS/media/logs/error.log
+
+# /trunk/GVS/static/
+/trunk/GVS/static/*
+
+# /trunk/GVS_data/
+/trunk/GVS_data/.project
+
+# /trunk/GVS_data/repository/gvs/
+/trunk/GVS_data/repository/gvs/lock
+
+# /trunk/ServiceScreenDesignerWep/
+/trunk/ServiceScreenDesignerWep/Copy of FastServiceScreenDesigner.ctr
+/trunk/ServiceScreenDesignerWep/FastServiceScreenDesigner.r666.ctr
+
+# /trunk/ServiceScreenDesignerWep/war/
+/trunk/ServiceScreenDesignerWep/war/fast.common.FastCommon
+/trunk/ServiceScreenDesignerWep/war/fast.facttool.FactTool
+/trunk/ServiceScreenDesignerWep/war/fast.mediation.DataTransformationTool
+/trunk/ServiceScreenDesignerWep/war/fast.servicescreen.ServiceScreenDesignerWepSource
+/trunk/ServiceScreenDesignerWep/war/servicescreendesignerwep
+/trunk/ServiceScreenDesignerWep/war/Copy of ServiceScreenRepository.cdr
+
+# /trunk/ServiceScreenDesignerWep/war/WEB-INF/
+/trunk/ServiceScreenDesignerWep/war/WEB-INF/deploy
+
+# /trunk/catalogue/
+/trunk/catalogue/bin
+
+# /trunk/catalogue/src/eu/morfeoproject/fast/
+/trunk/catalogue/src/eu/morfeoproject/fast/test
+
+# /trunk/catalogue_service/
+/trunk/catalogue_service/build
+/trunk/catalogue_service/test-reports
+/trunk/catalogue_service/logs
+
+# /trunk/catalogue_service/src/eu/morfeoproject/fast/catalogue/ontologies/
+/trunk/catalogue_service/src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
+
+# /trunk/deliverables/D2_4_Mediation/
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_1_mediation.aux
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_1_mediation.bbl
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_1_mediation.blg
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_1_mediation.lof
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_1_mediation.lot
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_1_mediation.out
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_1_mediation.toc
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_2_mediation.pdf.r504
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_2_mediation.pdf.r528
+/trunk/deliverables/D2_4_Mediation/fast_d2_4_2_mediation.tps
+/trunk/deliverables/D2_4_Mediation/tempfile.2.tmp
+/trunk/deliverables/D2_4_Mediation/tempfile.3.tmp
+/trunk/deliverables/D2_4_Mediation/tempfile.4.tmp
+/trunk/deliverables/D2_4_Mediation/tempfile.tmp
+
+# /trunk/deliverables/D4_3/
+/trunk/deliverables/D4_3/fast_d4_3_1.aux
+/trunk/deliverables/D4_3/fast_d4_3_1.bbl
+/trunk/deliverables/D4_3/fast_d4_3_1.blg
+/trunk/deliverables/D4_3/fast_d4_3_1.lof
+/trunk/deliverables/D4_3/fast_d4_3_1.log
+/trunk/deliverables/D4_3/fast_d4_3_1.out
+/trunk/deliverables/D4_3/fast_d4_3_1.toc
+/trunk/deliverables/D4_3/fast_d4_3_2.aux
+/trunk/deliverables/D4_3/fast_d4_3_2.bbl
+/trunk/deliverables/D4_3/fast_d4_3_2.bib.bak
+/trunk/deliverables/D4_3/fast_d4_3_2.blg
+/trunk/deliverables/D4_3/fast_d4_3_2.lof
+/trunk/deliverables/D4_3/fast_d4_3_2.log
+/trunk/deliverables/D4_3/fast_d4_3_2.lot
+/trunk/deliverables/D4_3/fast_d4_3_2.out
+/trunk/deliverables/D4_3/fast_d4_3_2.toc
+
+# /trunk/deliverables/D4_3/images/
+/trunk/deliverables/D4_3/images/Thumbs.db
+
+# /trunk/deliverables/D5_1_1/
+/trunk/deliverables/D5_1_1/fast_d5_1_1.aux
+/trunk/deliverables/D5_1_1/fast_d5_1_1.bbl
+/trunk/deliverables/D5_1_1/fast_d5_1_1.bib.bak
+/trunk/deliverables/D5_1_1/fast_d5_1_1.blg
+/trunk/deliverables/D5_1_1/fast_d5_1_1.lof
+/trunk/deliverables/D5_1_1/fast_d5_1_1.log
+/trunk/deliverables/D5_1_1/fast_d5_1_1.lot
+/trunk/deliverables/D5_1_1/fast_d5_1_1.out
+/trunk/deliverables/D5_1_1/fast_d5_1_1.toc
+/trunk/deliverables/D5_1_1/fast_d5_1_2.aux
+/trunk/deliverables/D5_1_1/fast_d5_1_2.bbl
+/trunk/deliverables/D5_1_1/fast_d5_1_2.bib.bak
+/trunk/deliverables/D5_1_1/fast_d5_1_2.blg
+/trunk/deliverables/D5_1_1/fast_d5_1_2.lof
+/trunk/deliverables/D5_1_1/fast_d5_1_2.log
+/trunk/deliverables/D5_1_1/fast_d5_1_2.lot
+/trunk/deliverables/D5_1_1/fast_d5_1_2.out
+/trunk/deliverables/D5_1_1/fast_d5_1_2.toc
+
+# /trunk/deliverables/D5_1_2/
+/trunk/deliverables/D5_1_2/*.aux
+/trunk/deliverables/D5_1_2/*.bbl
+/trunk/deliverables/D5_1_2/*.log
+/trunk/deliverables/D5_1_2/*.lot
+/trunk/deliverables/D5_1_2/*.out
+/trunk/deliverables/D5_1_2/*.toc
+/trunk/deliverables/D5_1_2/*.lof
+/trunk/deliverables/D5_1_2/*.blg
+/trunk/deliverables/D5_1_2/*.backup
+
+# /trunk/deliverables/D5_2/
+/trunk/deliverables/D5_2/fast_d5_2_2.aux
+/trunk/deliverables/D5_2/fast_d5_2_2.bbl
+/trunk/deliverables/D5_2/fast_d5_2_2.bib.bak
+/trunk/deliverables/D5_2/fast_d5_2_2.blg
+/trunk/deliverables/D5_2/fast_d5_2_2.lof
+/trunk/deliverables/D5_2/fast_d5_2_2.log
+/trunk/deliverables/D5_2/fast_d5_2_2.lot
+/trunk/deliverables/D5_2/fast_d5_2_2.out
+/trunk/deliverables/D5_2/fast_d5_2_2.toc
+
+# /trunk/deliverables/D5_2/images/
+/trunk/deliverables/D5_2/images/Thumbs.db
+
+# /trunk/mockup/
+/trunk/mockup/*.pyc
+
+# /trunk/mockup/images/
+/trunk/mockup/images/*.pyc
+
+# /trunk/mockup/js/
+/trunk/mockup/js/*.pyc
+
+# /trunk/mockup/js/dojo/
+/trunk/mockup/js/dojo/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/
+/trunk/mockup/js/dojo/dijit/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_base/
+/trunk/mockup/js/dojo/dijit/_base/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/
+/trunk/mockup/js/dojo/dijit/_editor/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/
+/trunk/mockup/js/dojo/dijit/_editor/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/cs/
+/trunk/mockup/js/dojo/dijit/_editor/nls/cs/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/de/
+/trunk/mockup/js/dojo/dijit/_editor/nls/de/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/es/
+/trunk/mockup/js/dojo/dijit/_editor/nls/es/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/fr/
+/trunk/mockup/js/dojo/dijit/_editor/nls/fr/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/gr/
+/trunk/mockup/js/dojo/dijit/_editor/nls/gr/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/hu/
+/trunk/mockup/js/dojo/dijit/_editor/nls/hu/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/it/
+/trunk/mockup/js/dojo/dijit/_editor/nls/it/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/ja/
+/trunk/mockup/js/dojo/dijit/_editor/nls/ja/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/ko/
+/trunk/mockup/js/dojo/dijit/_editor/nls/ko/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/pl/
+/trunk/mockup/js/dojo/dijit/_editor/nls/pl/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/pt/
+/trunk/mockup/js/dojo/dijit/_editor/nls/pt/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/ru/
+/trunk/mockup/js/dojo/dijit/_editor/nls/ru/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/zh/
+/trunk/mockup/js/dojo/dijit/_editor/nls/zh/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/nls/zh-tw/
+/trunk/mockup/js/dojo/dijit/_editor/nls/zh-tw/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_editor/plugins/
+/trunk/mockup/js/dojo/dijit/_editor/plugins/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/_tree/
+/trunk/mockup/js/dojo/dijit/_tree/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/bench/
+/trunk/mockup/js/dojo/dijit/bench/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/
+/trunk/mockup/js/dojo/dijit/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/chat/
+/trunk/mockup/js/dojo/dijit/demos/chat/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/i18n/
+/trunk/mockup/js/dojo/dijit/demos/i18n/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/mail/
+/trunk/mockup/js/dojo/dijit/demos/mail/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/nihao/
+/trunk/mockup/js/dojo/dijit/demos/nihao/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/nihao/nls/
+/trunk/mockup/js/dojo/dijit/demos/nihao/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/nihao/nls/en/
+/trunk/mockup/js/dojo/dijit/demos/nihao/nls/en/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/nihao/nls/fr/
+/trunk/mockup/js/dojo/dijit/demos/nihao/nls/fr/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/demos/nihao/nls/zh/
+/trunk/mockup/js/dojo/dijit/demos/nihao/nls/zh/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/
+/trunk/mockup/js/dojo/dijit/form/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/
+/trunk/mockup/js/dojo/dijit/form/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/cs/
+/trunk/mockup/js/dojo/dijit/form/nls/cs/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/de/
+/trunk/mockup/js/dojo/dijit/form/nls/de/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/es/
+/trunk/mockup/js/dojo/dijit/form/nls/es/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/fr/
+/trunk/mockup/js/dojo/dijit/form/nls/fr/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/gr/
+/trunk/mockup/js/dojo/dijit/form/nls/gr/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/hu/
+/trunk/mockup/js/dojo/dijit/form/nls/hu/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/it/
+/trunk/mockup/js/dojo/dijit/form/nls/it/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/ja/
+/trunk/mockup/js/dojo/dijit/form/nls/ja/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/ko/
+/trunk/mockup/js/dojo/dijit/form/nls/ko/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/pl/
+/trunk/mockup/js/dojo/dijit/form/nls/pl/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/pt/
+/trunk/mockup/js/dojo/dijit/form/nls/pt/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/ru/
+/trunk/mockup/js/dojo/dijit/form/nls/ru/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/zh/
+/trunk/mockup/js/dojo/dijit/form/nls/zh/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/zh-cn/
+/trunk/mockup/js/dojo/dijit/form/nls/zh-cn/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/nls/zh-tw/
+/trunk/mockup/js/dojo/dijit/form/nls/zh-tw/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/form/templates/
+/trunk/mockup/js/dojo/dijit/form/templates/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/layout/
+/trunk/mockup/js/dojo/dijit/layout/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/layout/templates/
+/trunk/mockup/js/dojo/dijit/layout/templates/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/
+/trunk/mockup/js/dojo/dijit/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/cs/
+/trunk/mockup/js/dojo/dijit/nls/cs/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/de/
+/trunk/mockup/js/dojo/dijit/nls/de/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/es/
+/trunk/mockup/js/dojo/dijit/nls/es/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/fr/
+/trunk/mockup/js/dojo/dijit/nls/fr/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/gr/
+/trunk/mockup/js/dojo/dijit/nls/gr/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/hu/
+/trunk/mockup/js/dojo/dijit/nls/hu/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/it/
+/trunk/mockup/js/dojo/dijit/nls/it/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/ja/
+/trunk/mockup/js/dojo/dijit/nls/ja/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/ko/
+/trunk/mockup/js/dojo/dijit/nls/ko/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/pl/
+/trunk/mockup/js/dojo/dijit/nls/pl/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/pt/
+/trunk/mockup/js/dojo/dijit/nls/pt/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/ru/
+/trunk/mockup/js/dojo/dijit/nls/ru/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/sv/
+/trunk/mockup/js/dojo/dijit/nls/sv/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/zh/
+/trunk/mockup/js/dojo/dijit/nls/zh/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/nls/zh-tw/
+/trunk/mockup/js/dojo/dijit/nls/zh-tw/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/resources/
+/trunk/mockup/js/dojo/dijit/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/templates/
+/trunk/mockup/js/dojo/dijit/templates/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/templates/buttons/
+/trunk/mockup/js/dojo/dijit/templates/buttons/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/
+/trunk/mockup/js/dojo/dijit/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/_base/
+/trunk/mockup/js/dojo/dijit/tests/_base/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/_data/
+/trunk/mockup/js/dojo/dijit/tests/_data/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/_editor/
+/trunk/mockup/js/dojo/dijit/tests/_editor/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/css/
+/trunk/mockup/js/dojo/dijit/tests/css/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/form/
+/trunk/mockup/js/dojo/dijit/tests/form/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/form/images/
+/trunk/mockup/js/dojo/dijit/tests/form/images/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/i18n/
+/trunk/mockup/js/dojo/dijit/tests/i18n/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/images/
+/trunk/mockup/js/dojo/dijit/tests/images/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/layout/
+/trunk/mockup/js/dojo/dijit/tests/layout/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/tests/tree/
+/trunk/mockup/js/dojo/dijit/tests/tree/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/
+/trunk/mockup/js/dojo/dijit/themes/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/a11y/
+/trunk/mockup/js/dojo/dijit/themes/a11y/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/nihilo/
+/trunk/mockup/js/dojo/dijit/themes/nihilo/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/nihilo/form/
+/trunk/mockup/js/dojo/dijit/themes/nihilo/form/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/nihilo/images/
+/trunk/mockup/js/dojo/dijit/themes/nihilo/images/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/nihilo/layout/
+/trunk/mockup/js/dojo/dijit/themes/nihilo/layout/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/soria/
+/trunk/mockup/js/dojo/dijit/themes/soria/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/soria/form/
+/trunk/mockup/js/dojo/dijit/themes/soria/form/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/soria/images/
+/trunk/mockup/js/dojo/dijit/themes/soria/images/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/soria/layout/
+/trunk/mockup/js/dojo/dijit/themes/soria/layout/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/themeTesterImages/
+/trunk/mockup/js/dojo/dijit/themes/themeTesterImages/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/tundra/
+/trunk/mockup/js/dojo/dijit/themes/tundra/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/tundra/form/
+/trunk/mockup/js/dojo/dijit/themes/tundra/form/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/tundra/images/
+/trunk/mockup/js/dojo/dijit/themes/tundra/images/*.pyc
+
+# /trunk/mockup/js/dojo/dijit/themes/tundra/layout/
+/trunk/mockup/js/dojo/dijit/themes/tundra/layout/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/
+/trunk/mockup/js/dojo/dojo/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/_base/
+/trunk/mockup/js/dojo/dojo/_base/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/_base/_loader/
+/trunk/mockup/js/dojo/dojo/_base/_loader/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/_firebug/
+/trunk/mockup/js/dojo/dojo/_firebug/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/
+/trunk/mockup/js/dojo/dojo/cldr/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/
+/trunk/mockup/js/dojo/dojo/cldr/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/de/
+/trunk/mockup/js/dojo/dojo/cldr/nls/de/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/de-de/
+/trunk/mockup/js/dojo/dojo/cldr/nls/de-de/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/en/
+/trunk/mockup/js/dojo/dojo/cldr/nls/en/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/en-au/
+/trunk/mockup/js/dojo/dojo/cldr/nls/en-au/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/en-ca/
+/trunk/mockup/js/dojo/dojo/cldr/nls/en-ca/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/en-gb/
+/trunk/mockup/js/dojo/dojo/cldr/nls/en-gb/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/en-us/
+/trunk/mockup/js/dojo/dojo/cldr/nls/en-us/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/es/
+/trunk/mockup/js/dojo/dojo/cldr/nls/es/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/es-es/
+/trunk/mockup/js/dojo/dojo/cldr/nls/es-es/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/fr/
+/trunk/mockup/js/dojo/dojo/cldr/nls/fr/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/it/
+/trunk/mockup/js/dojo/dojo/cldr/nls/it/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/it-it/
+/trunk/mockup/js/dojo/dojo/cldr/nls/it-it/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/ja/
+/trunk/mockup/js/dojo/dojo/cldr/nls/ja/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/ja-jp/
+/trunk/mockup/js/dojo/dojo/cldr/nls/ja-jp/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/ko/
+/trunk/mockup/js/dojo/dojo/cldr/nls/ko/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/ko-kr/
+/trunk/mockup/js/dojo/dojo/cldr/nls/ko-kr/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/pt/
+/trunk/mockup/js/dojo/dojo/cldr/nls/pt/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/pt-br/
+/trunk/mockup/js/dojo/dojo/cldr/nls/pt-br/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/zh/
+/trunk/mockup/js/dojo/dojo/cldr/nls/zh/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/zh-cn/
+/trunk/mockup/js/dojo/dojo/cldr/nls/zh-cn/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/cldr/nls/zh-tw/
+/trunk/mockup/js/dojo/dojo/cldr/nls/zh-tw/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/data/
+/trunk/mockup/js/dojo/dojo/data/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/data/api/
+/trunk/mockup/js/dojo/dojo/data/api/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/data/util/
+/trunk/mockup/js/dojo/dojo/data/util/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/date/
+/trunk/mockup/js/dojo/dojo/date/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/dnd/
+/trunk/mockup/js/dojo/dojo/dnd/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/io/
+/trunk/mockup/js/dojo/dojo/io/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/
+/trunk/mockup/js/dojo/dojo/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/cs/
+/trunk/mockup/js/dojo/dojo/nls/cs/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/de/
+/trunk/mockup/js/dojo/dojo/nls/de/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/es/
+/trunk/mockup/js/dojo/dojo/nls/es/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/fr/
+/trunk/mockup/js/dojo/dojo/nls/fr/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/gr/
+/trunk/mockup/js/dojo/dojo/nls/gr/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/hu/
+/trunk/mockup/js/dojo/dojo/nls/hu/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/it/
+/trunk/mockup/js/dojo/dojo/nls/it/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/ja/
+/trunk/mockup/js/dojo/dojo/nls/ja/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/ko/
+/trunk/mockup/js/dojo/dojo/nls/ko/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/pl/
+/trunk/mockup/js/dojo/dojo/nls/pl/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/pt/
+/trunk/mockup/js/dojo/dojo/nls/pt/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/ru/
+/trunk/mockup/js/dojo/dojo/nls/ru/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/zh/
+/trunk/mockup/js/dojo/dojo/nls/zh/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/nls/zh-tw/
+/trunk/mockup/js/dojo/dojo/nls/zh-tw/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/resources/
+/trunk/mockup/js/dojo/dojo/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/resources/images/
+/trunk/mockup/js/dojo/dojo/resources/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/rpc/
+/trunk/mockup/js/dojo/dojo/rpc/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/
+/trunk/mockup/js/dojo/dojo/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/_base/
+/trunk/mockup/js/dojo/dojo/tests/_base/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/_base/_loader/
+/trunk/mockup/js/dojo/dojo/tests/_base/_loader/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/_base/_loader/scope/
+/trunk/mockup/js/dojo/dojo/tests/_base/_loader/scope/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/data/
+/trunk/mockup/js/dojo/dojo/tests/data/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/date/
+/trunk/mockup/js/dojo/dojo/tests/date/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/dnd/
+/trunk/mockup/js/dojo/dojo/tests/dnd/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/io/
+/trunk/mockup/js/dojo/dojo/tests/io/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/
+/trunk/mockup/js/dojo/dojo/tests/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/ar/
+/trunk/mockup/js/dojo/dojo/tests/nls/ar/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/cs/
+/trunk/mockup/js/dojo/dojo/tests/nls/cs/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/de/
+/trunk/mockup/js/dojo/dojo/tests/nls/de/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/el/
+/trunk/mockup/js/dojo/dojo/tests/nls/el/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/en-au/
+/trunk/mockup/js/dojo/dojo/tests/nls/en-au/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/en-us-hawaii/
+/trunk/mockup/js/dojo/dojo/tests/nls/en-us-hawaii/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/en-us-new_york-brooklyn/
+/trunk/mockup/js/dojo/dojo/tests/nls/en-us-new_york-brooklyn/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/en-us-texas/
+/trunk/mockup/js/dojo/dojo/tests/nls/en-us-texas/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/es/
+/trunk/mockup/js/dojo/dojo/tests/nls/es/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/fa/
+/trunk/mockup/js/dojo/dojo/tests/nls/fa/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/fr/
+/trunk/mockup/js/dojo/dojo/tests/nls/fr/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/he/
+/trunk/mockup/js/dojo/dojo/tests/nls/he/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/hi/
+/trunk/mockup/js/dojo/dojo/tests/nls/hi/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/it/
+/trunk/mockup/js/dojo/dojo/tests/nls/it/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/ja/
+/trunk/mockup/js/dojo/dojo/tests/nls/ja/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/ko/
+/trunk/mockup/js/dojo/dojo/tests/nls/ko/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/pl/
+/trunk/mockup/js/dojo/dojo/tests/nls/pl/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/pt/
+/trunk/mockup/js/dojo/dojo/tests/nls/pt/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/ru/
+/trunk/mockup/js/dojo/dojo/tests/nls/ru/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/sw/
+/trunk/mockup/js/dojo/dojo/tests/nls/sw/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/th/
+/trunk/mockup/js/dojo/dojo/tests/nls/th/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/tr/
+/trunk/mockup/js/dojo/dojo/tests/nls/tr/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/yi/
+/trunk/mockup/js/dojo/dojo/tests/nls/yi/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/zh-cn/
+/trunk/mockup/js/dojo/dojo/tests/nls/zh-cn/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/nls/zh-tw/
+/trunk/mockup/js/dojo/dojo/tests/nls/zh-tw/*.pyc
+
+# /trunk/mockup/js/dojo/dojo/tests/resources/
+/trunk/mockup/js/dojo/dojo/tests/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/
+/trunk/mockup/js/dojo/dojox/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/_sql/
+/trunk/mockup/js/dojo/dojox/_sql/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/_sql/demos/
+/trunk/mockup/js/dojo/dojox/_sql/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/_sql/demos/customers/
+/trunk/mockup/js/dojo/dojox/_sql/demos/customers/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/analytics/
+/trunk/mockup/js/dojo/dojox/analytics/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/analytics/logger/
+/trunk/mockup/js/dojo/dojox/analytics/logger/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/analytics/plugins/
+/trunk/mockup/js/dojo/dojox/analytics/plugins/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/analytics/profiles/
+/trunk/mockup/js/dojo/dojox/analytics/profiles/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/analytics/tests/
+/trunk/mockup/js/dojo/dojox/analytics/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/av/
+/trunk/mockup/js/dojo/dojox/av/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/av/_base/
+/trunk/mockup/js/dojo/dojox/av/_base/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/av/resources/
+/trunk/mockup/js/dojo/dojox/av/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/av/tests/
+/trunk/mockup/js/dojo/dojox/av/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/av/tests/resources/
+/trunk/mockup/js/dojo/dojox/av/tests/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/
+/trunk/mockup/js/dojo/dojox/charting/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/axis2d/
+/trunk/mockup/js/dojo/dojox/charting/axis2d/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/plot2d/
+/trunk/mockup/js/dojo/dojox/charting/plot2d/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/plot3d/
+/trunk/mockup/js/dojo/dojox/charting/plot3d/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/tests/
+/trunk/mockup/js/dojo/dojox/charting/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/tests/data/
+/trunk/mockup/js/dojo/dojox/charting/tests/data/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/themes/
+/trunk/mockup/js/dojo/dojox/charting/themes/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/themes/ET/
+/trunk/mockup/js/dojo/dojox/charting/themes/ET/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/themes/PlotKit/
+/trunk/mockup/js/dojo/dojox/charting/themes/PlotKit/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/charting/widget/
+/trunk/mockup/js/dojo/dojox/charting/widget/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/collections/
+/trunk/mockup/js/dojo/dojox/collections/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/collections/tests/
+/trunk/mockup/js/dojo/dojox/collections/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/color/
+/trunk/mockup/js/dojo/dojox/color/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/color/tests/
+/trunk/mockup/js/dojo/dojox/color/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/cometd/
+/trunk/mockup/js/dojo/dojox/cometd/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/crypto/
+/trunk/mockup/js/dojo/dojox/crypto/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/
+/trunk/mockup/js/dojo/dojox/data/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/
+/trunk/mockup/js/dojo/dojox/data/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Argentina/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Argentina/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Brazil/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Brazil/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Canada/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Canada/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Canada/Ottawa/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Canada/Ottawa/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Canada/Toronto/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Canada/Toronto/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/China/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/China/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Commonwealth of Australia/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Commonwealth of Australia/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Egypt/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Egypt/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/France/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/France/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Germany/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Germany/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/India/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/India/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Italy/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Italy/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Kenya/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Kenya/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Kenya/Mombasa/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Kenya/Mombasa/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Kenya/Nairobi/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Kenya/Nairobi/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Mexico/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Mexico/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Mexico/Guadalajara/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Mexico/Guadalajara/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Mexico/Mexico City/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Mexico/Mexico City/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Mongolia/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Mongolia/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Russia/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Russia/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Spain/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Spain/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Sudan/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Sudan/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/Sudan/Khartoum/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/Sudan/Khartoum/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/geography/United States of America/
+/trunk/mockup/js/dojo/dojox/data/demos/geography/United States of America/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/stores/
+/trunk/mockup/js/dojo/dojox/data/demos/stores/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/widgets/
+/trunk/mockup/js/dojo/dojox/data/demos/widgets/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/demos/widgets/templates/
+/trunk/mockup/js/dojo/dojox/data/demos/widgets/templates/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/tests/
+/trunk/mockup/js/dojo/dojox/data/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/tests/ml/
+/trunk/mockup/js/dojo/dojox/data/tests/ml/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/data/tests/stores/
+/trunk/mockup/js/dojo/dojox/data/tests/stores/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/date/
+/trunk/mockup/js/dojo/dojox/date/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/date/tests/
+/trunk/mockup/js/dojo/dojox/date/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/
+/trunk/mockup/js/dojo/dojox/dtl/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/contrib/
+/trunk/mockup/js/dojo/dojox/dtl/contrib/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/demos/
+/trunk/mockup/js/dojo/dojox/dtl/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/demos/json/
+/trunk/mockup/js/dojo/dojox/dtl/demos/json/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/demos/json/blog/
+/trunk/mockup/js/dojo/dojox/dtl/demos/json/blog/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/demos/templates/
+/trunk/mockup/js/dojo/dojox/dtl/demos/templates/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/ext-dojo/
+/trunk/mockup/js/dojo/dojox/dtl/ext-dojo/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/filter/
+/trunk/mockup/js/dojo/dojox/dtl/filter/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/render/
+/trunk/mockup/js/dojo/dojox/dtl/render/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/tag/
+/trunk/mockup/js/dojo/dojox/dtl/tag/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/tests/
+/trunk/mockup/js/dojo/dojox/dtl/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/tests/html/
+/trunk/mockup/js/dojo/dojox/dtl/tests/html/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/tests/templates/
+/trunk/mockup/js/dojo/dojox/dtl/tests/templates/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/tests/text/
+/trunk/mockup/js/dojo/dojox/dtl/tests/text/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/dtl/utils/
+/trunk/mockup/js/dojo/dojox/dtl/utils/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/encoding/
+/trunk/mockup/js/dojo/dojox/encoding/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/encoding/compression/
+/trunk/mockup/js/dojo/dojox/encoding/compression/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/encoding/crypto/
+/trunk/mockup/js/dojo/dojox/encoding/crypto/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/encoding/digests/
+/trunk/mockup/js/dojo/dojox/encoding/digests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/encoding/tests/
+/trunk/mockup/js/dojo/dojox/encoding/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/encoding/tests/compression/
+/trunk/mockup/js/dojo/dojox/encoding/tests/compression/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/encoding/tests/crypto/
+/trunk/mockup/js/dojo/dojox/encoding/tests/crypto/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/encoding/tests/digests/
+/trunk/mockup/js/dojo/dojox/encoding/tests/digests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/flash/
+/trunk/mockup/js/dojo/dojox/flash/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/flash/tests/
+/trunk/mockup/js/dojo/dojox/flash/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/form/
+/trunk/mockup/js/dojo/dojox/form/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/form/nls/
+/trunk/mockup/js/dojo/dojox/form/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/form/resources/
+/trunk/mockup/js/dojo/dojox/form/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/form/tests/
+/trunk/mockup/js/dojo/dojox/form/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/fx/
+/trunk/mockup/js/dojo/dojox/fx/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/fx/ext-dojo/
+/trunk/mockup/js/dojo/dojox/fx/ext-dojo/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/fx/resources/
+/trunk/mockup/js/dojo/dojox/fx/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/fx/tests/
+/trunk/mockup/js/dojo/dojox/fx/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/fx/tests/images/
+/trunk/mockup/js/dojo/dojox/fx/tests/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/gfx/
+/trunk/mockup/js/dojo/dojox/gfx/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/gfx/demos/
+/trunk/mockup/js/dojo/dojox/gfx/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/gfx/demos/data/
+/trunk/mockup/js/dojo/dojox/gfx/demos/data/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/gfx/demos/images/
+/trunk/mockup/js/dojo/dojox/gfx/demos/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/gfx/tests/
+/trunk/mockup/js/dojo/dojox/gfx/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/gfx3d/
+/trunk/mockup/js/dojo/dojox/gfx3d/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/gfx3d/tests/
+/trunk/mockup/js/dojo/dojox/gfx3d/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/grid/
+/trunk/mockup/js/dojo/dojox/grid/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/grid/_data/
+/trunk/mockup/js/dojo/dojox/grid/_data/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/grid/_grid/
+/trunk/mockup/js/dojo/dojox/grid/_grid/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/grid/_grid/images/
+/trunk/mockup/js/dojo/dojox/grid/_grid/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/grid/resources/
+/trunk/mockup/js/dojo/dojox/grid/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/grid/tests/
+/trunk/mockup/js/dojo/dojox/grid/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/grid/tests/images/
+/trunk/mockup/js/dojo/dojox/grid/tests/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/grid/tests/support/
+/trunk/mockup/js/dojo/dojox/grid/tests/support/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/help/
+/trunk/mockup/js/dojo/dojox/help/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/help/demos/
+/trunk/mockup/js/dojo/dojox/help/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/highlight/
+/trunk/mockup/js/dojo/dojox/highlight/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/highlight/languages/
+/trunk/mockup/js/dojo/dojox/highlight/languages/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/highlight/languages/pygments/
+/trunk/mockup/js/dojo/dojox/highlight/languages/pygments/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/highlight/resources/
+/trunk/mockup/js/dojo/dojox/highlight/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/highlight/resources/pygments/
+/trunk/mockup/js/dojo/dojox/highlight/resources/pygments/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/highlight/tests/
+/trunk/mockup/js/dojo/dojox/highlight/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/image/
+/trunk/mockup/js/dojo/dojox/image/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/image/resources/
+/trunk/mockup/js/dojo/dojox/image/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/image/resources/images/
+/trunk/mockup/js/dojo/dojox/image/resources/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/image/tests/
+/trunk/mockup/js/dojo/dojox/image/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/image/tests/images/
+/trunk/mockup/js/dojo/dojox/image/tests/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/io/
+/trunk/mockup/js/dojo/dojox/io/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/io/proxy/
+/trunk/mockup/js/dojo/dojox/io/proxy/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/io/proxy/tests/
+/trunk/mockup/js/dojo/dojox/io/proxy/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/jsonPath/
+/trunk/mockup/js/dojo/dojox/jsonPath/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/jsonPath/tests/
+/trunk/mockup/js/dojo/dojox/jsonPath/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/lang/
+/trunk/mockup/js/dojo/dojox/lang/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/lang/functional/
+/trunk/mockup/js/dojo/dojox/lang/functional/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/lang/tests/
+/trunk/mockup/js/dojo/dojox/lang/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/layout/
+/trunk/mockup/js/dojo/dojox/layout/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/layout/resources/
+/trunk/mockup/js/dojo/dojox/layout/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/layout/resources/icons/
+/trunk/mockup/js/dojo/dojox/layout/resources/icons/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/layout/tests/
+/trunk/mockup/js/dojo/dojox/layout/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/layout/tests/images/
+/trunk/mockup/js/dojo/dojox/layout/tests/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/layout/tests/remote/
+/trunk/mockup/js/dojo/dojox/layout/tests/remote/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/math/
+/trunk/mockup/js/dojo/dojox/math/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/off/
+/trunk/mockup/js/dojo/dojox/off/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/off/docs/
+/trunk/mockup/js/dojo/dojox/off/docs/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/off/resources/
+/trunk/mockup/js/dojo/dojox/off/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/presentation/
+/trunk/mockup/js/dojo/dojox/presentation/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/presentation/resources/
+/trunk/mockup/js/dojo/dojox/presentation/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/presentation/resources/icons/
+/trunk/mockup/js/dojo/dojox/presentation/resources/icons/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/presentation/tests/
+/trunk/mockup/js/dojo/dojox/presentation/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/resources/
+/trunk/mockup/js/dojo/dojox/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/rpc/
+/trunk/mockup/js/dojo/dojox/rpc/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/rpc/SMDLibrary/
+/trunk/mockup/js/dojo/dojox/rpc/SMDLibrary/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/rpc/demos/
+/trunk/mockup/js/dojo/dojox/rpc/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/rpc/demos/templates/
+/trunk/mockup/js/dojo/dojox/rpc/demos/templates/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/rpc/tests/
+/trunk/mockup/js/dojo/dojox/rpc/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/rpc/tests/resources/
+/trunk/mockup/js/dojo/dojox/rpc/tests/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/rpc/tests/stores/
+/trunk/mockup/js/dojo/dojox/rpc/tests/stores/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/sketch/
+/trunk/mockup/js/dojo/dojox/sketch/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/sketch/resources/
+/trunk/mockup/js/dojo/dojox/sketch/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/sketch/resources/images/
+/trunk/mockup/js/dojo/dojox/sketch/resources/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/sketch/tests/
+/trunk/mockup/js/dojo/dojox/sketch/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/sketch/tests/images/
+/trunk/mockup/js/dojo/dojox/sketch/tests/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/storage/
+/trunk/mockup/js/dojo/dojox/storage/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/storage/demos/
+/trunk/mockup/js/dojo/dojox/storage/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/storage/tests/
+/trunk/mockup/js/dojo/dojox/storage/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/storage/tests/resources/
+/trunk/mockup/js/dojo/dojox/storage/tests/resources/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/string/
+/trunk/mockup/js/dojo/dojox/string/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/string/tests/
+/trunk/mockup/js/dojo/dojox/string/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/timing/
+/trunk/mockup/js/dojo/dojox/timing/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/timing/tests/
+/trunk/mockup/js/dojo/dojox/timing/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/uuid/
+/trunk/mockup/js/dojo/dojox/uuid/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/uuid/tests/
+/trunk/mockup/js/dojo/dojox/uuid/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/validate/
+/trunk/mockup/js/dojo/dojox/validate/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/validate/tests/
+/trunk/mockup/js/dojo/dojox/validate/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/
+/trunk/mockup/js/dojo/dojox/widget/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/ColorPicker/
+/trunk/mockup/js/dojo/dojox/widget/ColorPicker/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/ColorPicker/images/
+/trunk/mockup/js/dojo/dojox/widget/ColorPicker/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/FileInput/
+/trunk/mockup/js/dojo/dojox/widget/FileInput/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/FisheyeList/
+/trunk/mockup/js/dojo/dojox/widget/FisheyeList/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/Loader/
+/trunk/mockup/js/dojo/dojox/widget/Loader/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/Loader/icons/
+/trunk/mockup/js/dojo/dojox/widget/Loader/icons/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/Rating/
+/trunk/mockup/js/dojo/dojox/widget/Rating/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/SortList/
+/trunk/mockup/js/dojo/dojox/widget/SortList/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/Toaster/
+/trunk/mockup/js/dojo/dojox/widget/Toaster/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/Wizard/
+/trunk/mockup/js/dojo/dojox/widget/Wizard/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/nls/
+/trunk/mockup/js/dojo/dojox/widget/nls/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/nls/sv/
+/trunk/mockup/js/dojo/dojox/widget/nls/sv/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/tests/
+/trunk/mockup/js/dojo/dojox/widget/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/widget/tests/images/
+/trunk/mockup/js/dojo/dojox/widget/tests/images/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/wire/
+/trunk/mockup/js/dojo/dojox/wire/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/wire/demos/
+/trunk/mockup/js/dojo/dojox/wire/demos/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/wire/demos/markup/
+/trunk/mockup/js/dojo/dojox/wire/demos/markup/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/wire/ml/
+/trunk/mockup/js/dojo/dojox/wire/ml/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/wire/tests/
+/trunk/mockup/js/dojo/dojox/wire/tests/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/wire/tests/markup/
+/trunk/mockup/js/dojo/dojox/wire/tests/markup/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/wire/tests/markup/Service/
+/trunk/mockup/js/dojo/dojox/wire/tests/markup/Service/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/wire/tests/programmatic/
+/trunk/mockup/js/dojo/dojox/wire/tests/programmatic/*.pyc
+
+# /trunk/mockup/js/dojo/dojox/xml/
+/trunk/mockup/js/dojo/dojox/xml/*.pyc
+
+# /trunk/mockup/js/dojo/util/
+/trunk/mockup/js/dojo/util/*.pyc
+
+# /trunk/mockup/js/dojo/util/doh/
+/trunk/mockup/js/dojo/util/doh/*.pyc
+
+# /trunk/mockup/js/dojo/util/doh/_sounds/
+/trunk/mockup/js/dojo/util/doh/_sounds/*.pyc
+
+# /trunk/mockup/js/dragndrop/
+/trunk/mockup/js/dragndrop/*.pyc
+
+# /trunk/mockup/js/palette/
+/trunk/mockup/js/palette/*.pyc
+
+# /trunk/mockup/js/prototype/
+/trunk/mockup/js/prototype/*.pyc
+
+# /trunk/mockup/js/utils/
+/trunk/mockup/js/utils/*.pyc
+
+# /trunk/mockup/screens/
+/trunk/mockup/screens/*.pyc
+
+# /trunk/mockup/service/
+/trunk/mockup/service/*.pyc
+
+# /trunk/mockup/service/fast/
+/trunk/mockup/service/fast/*.pyc
+
+# /trunk/mockup/service/fast/tmp/
+/trunk/mockup/service/fast/tmp/*.pyc
+
+# /trunk/mockup/service/fast/utils/
+/trunk/mockup/service/fast/utils/*.pyc
+
+# /trunk/mockup/service/static/
+/trunk/mockup/service/static/*.pyc
+/trunk/mockup/service/static/gadget.zip
+/trunk/mockup/service/static/*Morfeo*
